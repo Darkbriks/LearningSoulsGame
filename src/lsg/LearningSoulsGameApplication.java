@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Zombie;
 import lsg.graphics.CSSFactory;
@@ -18,6 +19,7 @@ import lsg.graphics.panes.AnimationPane;
 import lsg.graphics.panes.CreationPane;
 import lsg.graphics.panes.HUDPane;
 import lsg.graphics.panes.TitlePane;
+import lsg.graphics.widgets.characters.renderers.CharacterRenderer;
 import lsg.graphics.widgets.characters.renderers.HeroRenderer;
 import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
@@ -89,7 +91,7 @@ public class LearningSoulsGameApplication extends Application
         heroCanPlay.addListener((observable, oldValue, newValue) -> skillBar.setDisable(!newValue));
 
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
-        skillBar.getTrigger(0).setAction(() -> System.out.println("ATTACK"));
+        skillBar.getTrigger(0).setAction(this::heroAttack);
         scene.setOnKeyReleased(event -> {
             skillBar.process(event.getCode());
             System.out.println("Key released: " + event.getCode());
@@ -172,6 +174,75 @@ public class LearningSoulsGameApplication extends Application
                     ") -> Effective DMG: " + zombie.getHitWith(dmg) + " PV");
         } catch (Exception e) {
             hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> root.getChildren().remove(hudPane.getMessagePane()));
+        }
+    }
+
+    /**
+     * Methode qui gere l'attaque et le coup porté par un agresseur sur sa cible,
+     * aussi bien du poin de vue du modele (Character),
+     * que du point de vue de l'animation (CharacterRenderer).
+     * @param agressor : le modele de l'attaquant
+     * @param agressorR : la representation de l'attaquant (pour l'animation attack)
+     * @param target : le modele de la cible
+     * @param targetR : la representation de la cible (pour l'animation hurt ou die)
+     * @param finishHandler : appele lorsque les calculs et les animations sont terminées
+     */
+    private void charcterAttack(Character agressor, CharacterRenderer agressorR, Character target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
+    {
+        try
+        {
+            // Calcul de l'attaque de l'agresseur (attack de Character)
+            // Animation attack de l'agresseur (CharacterRenderer)
+            // Calcul du coup sur la cible (getHitWithde Character)
+            // Si la cible est encore vivant: animation hurt de CharacterRenderer
+            // Si la cible est morte: animation die de CharacterRenderer
+            // Lorsque l’animation est terminée, déclenchement du finishedHandler
+
+            int dmg = agressor.attack();
+
+            agressorR.attack(event -> {
+                int hit = target.getHitWith(dmg);
+                if (hit > 0) { targetR.hurt(event1 -> finishHandler.handle(null)); }
+                else { targetR.die(event1 -> finishHandler.handle(null)); }
+            });
+
+        }
+        catch (Exception e)
+        {
+            // Afficher un message adéquat dans hudPane.messagePane
+            // Lancer (quand même) l’animation d’attaque (même s’il n’y a aucun dégât, pour simuler un coup dans le vide)
+            // Lorsque l’animation est terminée, déclencher finishedHandler
+            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> agressorR.attack(event1 -> finishHandler.handle(null)));
+            agressorR.attack(event -> finishHandler.handle(null));
+        }
+    }
+
+    private void heroAttack()
+    {
+        heroCanPlay.setValue(false);
+        charcterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> finishTurn());
+    }
+
+    private void monsterAttack()
+    {
+        charcterAttack(zombie, zombieRenderer, hero, heroRenderer, event -> {
+            if (hero.isAlive()) { heroCanPlay.setValue(true); }
+            else { gameOver(); }
+        });
+    }
+
+    private void gameOver() { hudPane.getMessagePane().showMessage("Game Over", 0, event -> System.exit(0)); }
+
+    private void finishTurn()
+    {
+        if (zombie.isAlive()) { monsterAttack(); }
+        else
+        {
+            // retire le zombieRenderer(mort) des children d’animationPane
+            // crée un nouveau monstre (appel de createMonster)
+            // lorsque qu'il est en place, le fait attaquer
+            animationPane.getChildren().remove(zombieRenderer);
+            createMonster(event -> monsterAttack());
         }
     }
 }
