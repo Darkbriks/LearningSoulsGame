@@ -19,10 +19,6 @@ public class SkillBar extends HBox
     }
 
     private SkillTrigger[] triggers;
-    private boolean enabled = true;
-
-    public boolean isEnabled() { return enabled; }
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 
     public SkillBar()
     {
@@ -51,7 +47,7 @@ public class SkillBar extends HBox
 
     public void process(KeyCode code)
     {
-        if (!enabled) return;
+        if (disabledProperty().get()) { return; }
         for (SkillTrigger trigger : triggers)
         {
             if (Objects.equals(trigger.getKeyCode(), code))

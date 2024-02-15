@@ -1,6 +1,8 @@
 package lsg;
 
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -37,6 +39,7 @@ public class LearningSoulsGameApplication extends Application
     private ZombieRenderer zombieRenderer;
     private HUDPane hudPane;
     private SkillBar skillBar;
+    private BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
 
     @Override
     public void start(Stage stage) throws Exception
@@ -81,6 +84,10 @@ public class LearningSoulsGameApplication extends Application
     private void createSkills()
     {
         skillBar = hudPane.getSkillBar();
+
+        skillBar.setDisable(heroCanPlay.getValue());
+        heroCanPlay.addListener((observable, oldValue, newValue) -> skillBar.setDisable(!newValue));
+
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(() -> System.out.println("ATTACK"));
         scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
@@ -149,7 +156,8 @@ public class LearningSoulsGameApplication extends Application
         createHero();
         createSkills();
         createMonster(event -> hudPane.getMessagePane().showMessage("Fight !", 4,
-                event1 -> hudPane.getMessagePane().showMessage("Hero attacks !", 0, event2 -> test())));
+                //event1 -> hudPane.getMessagePane().showMessage("Hero attacks !", 0, event2 -> test())));
+                event1 -> heroCanPlay.setValue(true)));
     }
 
     private void test()
