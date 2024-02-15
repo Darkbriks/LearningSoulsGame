@@ -123,7 +123,7 @@ public class LearningSoulsGameApplication extends Application
             hudPane.getMonsterStatbar().getAvatar().setImage(imgs[0]);
             hudPane.getMonsterStatbar().getAvatar().setRotate(35);
         }
-        hudPane.getMonsterStatbar().flip();
+
         // Add padding to the statbar
         hudPane.getMonsterStatbar().setPadding(new javafx.geometry.Insets(25, 0, 0, 0));
         hudPane.getMonsterStatbar().getLifeBar().progressProperty().bind(zombie.lifeRateProperty());
@@ -198,7 +198,11 @@ public class LearningSoulsGameApplication extends Application
             // Si la cible est morte: animation die de CharacterRenderer
             // Lorsque l’animation est terminée, déclenchement du finishedHandler
 
+            System.out.println(agressor.getName() + " turn");
+
             int dmg = agressor.attack();
+
+            System.out.println(agressor.getName() + " attack " + target.getName() + " with " + agressor.getWeapon().getName() + " (" + dmg + ") -> Effective DMG: " + target.getHitWith(dmg) + " PV");
 
             agressorR.attack(event -> {
                 int hit = target.getHitWith(dmg);
@@ -207,13 +211,14 @@ public class LearningSoulsGameApplication extends Application
             });
 
         }
-        catch (Exception e)
-        {
-            // Afficher un message adéquat dans hudPane.messagePane
+        catch (Exception e) {
             // Lancer (quand même) l’animation d’attaque (même s’il n’y a aucun dégât, pour simuler un coup dans le vide)
-            // Lorsque l’animation est terminée, déclencher finishedHandler
-            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> agressorR.attack(event1 -> finishHandler.handle(null)));
-            agressorR.attack(event -> finishHandler.handle(null));
+            // Afficher un message adéquat dans hudPane.messagePane
+            // Lorsque l’animation est terminée, déclenchement du finishedHandler
+            agressorR.attack(event -> hudPane.getMessagePane().showMessage(e.getMessage(), 1, event1 -> {
+                    root.getChildren().remove(hudPane.getMessagePane());
+                    finishHandler.handle(null);
+                }));
         }
     }
 
@@ -231,7 +236,7 @@ public class LearningSoulsGameApplication extends Application
         });
     }
 
-    private void gameOver() { hudPane.getMessagePane().showMessage("Game Over", 0, event -> System.exit(0)); }
+    private void gameOver() { heroRenderer.die(event -> hudPane.getMessagePane().showMessage("Game Over", 3, event1 -> System.exit(0))); }
 
     private void finishTurn()
     {
