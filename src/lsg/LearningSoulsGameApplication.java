@@ -85,12 +85,15 @@ public class LearningSoulsGameApplication extends Application
     {
         skillBar = hudPane.getSkillBar();
 
-        skillBar.setDisable(heroCanPlay.getValue());
+        skillBar.setDisable(!heroCanPlay.get());
         heroCanPlay.addListener((observable, oldValue, newValue) -> skillBar.setDisable(!newValue));
 
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(() -> System.out.println("ATTACK"));
-        scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
+        scene.setOnKeyReleased(event -> {
+            skillBar.process(event.getCode());
+            System.out.println("Key released: " + event.getCode());
+        });
     }
 
     private void createHero()

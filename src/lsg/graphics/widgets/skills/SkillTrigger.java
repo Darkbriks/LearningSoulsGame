@@ -2,6 +2,7 @@ package lsg.graphics.widgets.skills;
 
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -15,7 +16,7 @@ public class SkillTrigger extends AnchorPane
     private Label text;
     private KeyCode keyCode;
     private SkillAction action = null;
-    private boolean enabled = true;
+    private ColorAdjust desaturate;
 
     public SkillTrigger(KeyCode keyCode, String text, Image image, SkillAction action)
     {
@@ -23,6 +24,9 @@ public class SkillTrigger extends AnchorPane
         this.text = new Label(text);
         this.keyCode = keyCode;
         this.action = action;
+        this.desaturate = new ColorAdjust();
+        this.desaturate.setSaturation(-1);
+        this.desaturate.setBrightness(0.6);
 
         buildUI();
         addListeners();
@@ -32,13 +36,11 @@ public class SkillTrigger extends AnchorPane
     public Label getText() { return this.text; }
     public KeyCode getKeyCode() { return this.keyCode; }
     public SkillAction getAction() { return this.action; }
-    public boolean isEnabled() { return this.enabled; }
 
     public void setImage(Image image) { this.view.setImage(image); }
     public void setText(Label text) { this.text = text; }
     public void setKeyCode(KeyCode keyCode) { this.keyCode = keyCode; }
     public void setAction(SkillAction action) { this.action = action; }
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 
     private void buildUI()
     {
@@ -63,11 +65,20 @@ public class SkillTrigger extends AnchorPane
 
     public void trigger()
     {
+        if (disabledProperty().get()) { return; }
         animate();
-        if (enabled) { action.execute(); }
+        action.execute();
     }
 
-    private void addListeners() { this.setOnMouseClicked(event -> trigger()); }
+    private void addListeners()
+    {
+        this.setOnMouseClicked(event -> trigger());
+
+        disabledProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { this.setEffect(desaturate); }
+            else { this.setEffect(null); }
+        });
+    }
 
     private void animate()
     {
