@@ -45,9 +45,20 @@ public class SkillTrigger extends AnchorPane
         this.getStylesheets().add(CSSFactory.getStyleSheet("SkillTrigger.css"));
         this.getStyleClass().add("skill");
         this.text.getStyleClass().add("skill-text");
-        view.setFitWidth(50); view.setFitHeight(50);
+
+        this.view.setFitWidth(50); this.view.setFitHeight(50);
+
         this.getChildren().add(view);
         this.getChildren().add(text);
+
+        this.setPrefSize(50, 50);
+        this.setMinSize(50, 50);
+        this.setMaxSize(50, 50);
+
+        this.text.setMinSize(50, 50);
+        this.text.setMaxSize(50, 50);
+        this.text.setPrefSize(50, 50);
+        this.text.setStyle("-fx-alignment: center;");
     }
 
     public void trigger()

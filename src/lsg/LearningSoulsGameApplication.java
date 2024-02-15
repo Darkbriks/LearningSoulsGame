@@ -83,7 +83,7 @@ public class LearningSoulsGameApplication extends Application
         skillBar = hudPane.getSkillBar();
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(() -> System.out.println("ATTACK"));
-        scene.setOnMouseClicked(event -> skillBar.getTrigger(0).trigger());
+        scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
     }
 
     private void createHero()
