@@ -45,8 +45,10 @@ public class SkillBar extends HBox
             i++;
         }
 
-        // Ajout d'un rectangle pour inserer un espace
-        this.getChildren().add(new Rectangle(30, 30));
+        // Ajout d'un rectangle transparent pour inserer un espace
+        Rectangle spacer = new Rectangle(0, 0, 100, 50);
+        spacer.setOpacity(0);
+        this.getChildren().add(spacer);
 
         // Ajout du trigger de consommable
         this.getChildren().add(consumableTrigger);
