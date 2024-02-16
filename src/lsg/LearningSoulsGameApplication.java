@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Zombie;
+import lsg.consumables.food.SuperBerry;
 import lsg.graphics.CSSFactory;
 import lsg.graphics.ImageFactory;
 import lsg.graphics.panes.AnimationPane;
@@ -99,6 +100,9 @@ public class LearningSoulsGameApplication extends Application
         skillBar.getTrigger(1).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.RECUPERATE_SKILL)[0]);
         skillBar.getTrigger(1).setAction(this::heroRecuperate);
 
+        skillBar.getConsumableTrigger().setConsumable(hero.getConsumable());
+        skillBar.getConsumableTrigger().setAction(this::heroConsume);
+
         scene.setOnKeyReleased(event -> {
             skillBar.process(event.getCode());
             System.out.println("Key released: " + event.getCode());
@@ -109,6 +113,7 @@ public class LearningSoulsGameApplication extends Application
     {
         hero = new Hero(heroName);
         hero.setWeapon(new Sword());
+        hero.setConsumable(new SuperBerry());
         heroRenderer = animationPane.createHeroRenderer();
         animationPane.initHeroInScene(heroRenderer);
         hudPane.getHeroStatbar().getName().setText(hero.getName());
@@ -205,11 +210,7 @@ public class LearningSoulsGameApplication extends Application
             // Si la cible est morte: animation die de CharacterRenderer
             // Lorsque l’animation est terminée, déclenchement du finishedHandler
 
-            System.out.println(agressor.getName() + " turn");
-
             int dmg = agressor.attack();
-
-            System.out.println(agressor.getName() + " attack " + target.getName() + " with " + agressor.getWeapon().getName() + " (" + dmg + ") -> Effective DMG: " + target.getHitWith(dmg) + " PV");
 
             agressorR.attack(event -> {
                 int hit = target.getHitWith(dmg);
@@ -240,6 +241,19 @@ public class LearningSoulsGameApplication extends Application
         heroCanPlay.setValue(false);
         hero.recuperate();
         hudPane.getMessagePane().showMessage("Vous regagnez de la force et de la vie !", 1, event -> finishTurn());
+    }
+
+    private void heroConsume()
+    {
+        heroCanPlay.setValue(false);
+        try {
+            int life = hero.getLife();
+            hero.use(hero.getConsumable());
+            System.out.println(hero.getName() + " consumes a " + hero.getConsumable().getName() + " -> +" + (hero.getLife() - life) + " Life");
+            hudPane.getMessagePane().showMessage("Vous avez utilisé votre consommable", 1, event -> finishTurn());
+        } catch (Exception e) {
+            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> finishTurn());
+        }
     }
 
     private void monsterAttack()
