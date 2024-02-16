@@ -2,7 +2,9 @@ package lsg;
 
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -42,6 +44,7 @@ public class LearningSoulsGameApplication extends Application
     private HUDPane hudPane;
     private SkillBar skillBar;
     private BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
+    private IntegerProperty score = new SimpleIntegerProperty();
 
     @Override
     public void start(Stage stage) throws Exception
@@ -161,8 +164,8 @@ public class LearningSoulsGameApplication extends Application
         createHero();
         createSkills();
         createMonster(event -> hudPane.getMessagePane().showMessage("Fight !", 4,
-                //event1 -> hudPane.getMessagePane().showMessage("Hero attacks !", 0, event2 -> test())));
                 event1 -> heroCanPlay.setValue(true)));
+        hudPane.scoreProperty().bind(score);
     }
 
     private void test()
@@ -247,6 +250,7 @@ public class LearningSoulsGameApplication extends Application
             // crée un nouveau monstre (appel de createMonster)
             // lorsque qu'il est en place, le fait attaquer
             animationPane.getChildren().remove(zombieRenderer);
+            score.setValue(score.getValue() + 1);
             createMonster(event -> monsterAttack());
         }
     }
