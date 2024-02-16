@@ -37,7 +37,10 @@ public class ImageFactory {
         ZOMBIE_WALK_ANIMATION       ("images/craftpix/_PNG/Zombie1/_WALK/"),
 
         ATTACK_SKILL                ("images/Hero Skill Free/Power of blessing.png"),
-        RECUPERATE_SKILL            ("images/Hero Skill Free/Drain mana.png")
+        RECUPERATE_SKILL            ("images/Hero Skill Free/Drain mana.png"),
+
+        SUPER_BERRY                 ("image/Basic RPG Item Free/Berry_03.png"),
+        SMALL_STAM_POTION           ("image/Basic RPG Item Free/Small Potion_01.png"),
         ;
 
         private final String path ;
