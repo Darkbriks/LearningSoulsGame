@@ -15,6 +15,8 @@ public class Constants
     /////////////// HERO ///////////////
     public static final int INIT_HERO_LIFE = 100;
     public static final int INIT_HERO_STAMINA = 50;
+    public static final int HERO_LIFE_RECOVER_BASE = 10;
+    public static final int HERO_STAMINA_RECOVER_BASE = 10;
     public static final int HERO_MAX_ARMOR_PIECES = 3;
     public static final int HERO_MAX_BUFF_PIECES = 2;
 

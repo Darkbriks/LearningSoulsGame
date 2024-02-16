@@ -84,7 +84,7 @@ public abstract class Character
         // Pas besoin de recalculer le staminaRate car il est recalculé dans setStamina()
         //this.staminaRate = new SimpleDoubleProperty((double) this.stamina / (double) this.maxStamina);
     }
-    private void setLife(int life)
+    protected void setLife(int life)
     {
         this.life = Math.min(life, this.maxLife);
         this.lifeRateProperty.set((double) this.life / (double) this.maxLife);

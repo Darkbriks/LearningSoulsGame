@@ -95,6 +95,10 @@ public class LearningSoulsGameApplication extends Application
 
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(this::heroAttack);
+
+        skillBar.getTrigger(1).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.RECUPERATE_SKILL)[0]);
+        skillBar.getTrigger(1).setAction(this::heroRecuperate);
+
         scene.setOnKeyReleased(event -> {
             skillBar.process(event.getCode());
             System.out.println("Key released: " + event.getCode());
@@ -229,6 +233,13 @@ public class LearningSoulsGameApplication extends Application
     {
         heroCanPlay.setValue(false);
         charcterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> finishTurn());
+    }
+
+    private void heroRecuperate()
+    {
+        heroCanPlay.setValue(false);
+        hero.recuperate();
+        hudPane.getMessagePane().showMessage("Vous regagnez de la force et de la vie !", 1, event -> finishTurn());
     }
 
     private void monsterAttack()

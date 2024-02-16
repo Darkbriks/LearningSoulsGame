@@ -8,6 +8,8 @@ public class Hero extends Character
 {
     /////////////// FIELDS ///////////////
     private ArmorItem[] armor = new ArmorItem[Constants.HERO_MAX_ARMOR_PIECES];
+    private int lifeRegen;
+    private int stamRegen;
 
     /////////////// CONSTRUCTORS ///////////////
     public Hero () { this("Gregooninator"); }
@@ -16,10 +18,14 @@ public class Hero extends Character
     {
         super(name, Constants.INIT_HERO_LIFE, Constants.INIT_HERO_STAMINA);
         this.buffInventory = new Ring[Constants.HERO_MAX_BUFF_PIECES];
+        this.lifeRegen = Constants.HERO_LIFE_RECOVER_BASE;
+        this.stamRegen = Constants.HERO_STAMINA_RECOVER_BASE;
     }
 
     /////////////// GETTERS ///////////////
     public ArmorItem[] getArmorItems() { return armor; }
+    public int getLifeRegen() { return lifeRegen; }
+    public int getStamRegen() { return stamRegen; }
 
     public float getTotalArmor()
     {
@@ -61,6 +67,9 @@ public class Hero extends Character
     }
 
     /////////////// SETTERS ///////////////
+    public void setLifeRegen(int lifeRegen) { this.lifeRegen = lifeRegen; }
+    public void setStamRegen(int stamRegen) { this.stamRegen = stamRegen; }
+
     public void setArmorItem(ArmorItem item, int slot)
     {
         if (slot < 1 || slot > Constants.HERO_MAX_ARMOR_PIECES) { return; }
@@ -127,6 +136,12 @@ public class Hero extends Character
             }
             else { System.out.printf("%s can't equip %s%n", name, ring); }
         }
+    }
+
+    public void recuperate()
+    {
+        this.setLife(this.getLife() + lifeRegen);
+        this.setStamina(this.getStamina() + stamRegen);
     }
 
     @Override
