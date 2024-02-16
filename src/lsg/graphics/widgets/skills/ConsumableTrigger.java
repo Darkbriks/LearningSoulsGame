@@ -26,6 +26,6 @@ public class ConsumableTrigger extends SkillTrigger
     public void setConsumable(Consumable consumable)
     {
         this.consumable = consumable;
-        this.setImage(CollectibleFactory.getImageFor(consumable));
+        if (consumable != null) { this.setImage(CollectibleFactory.getImageFor(consumable)); }
     }
 }
