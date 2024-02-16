@@ -25,7 +25,7 @@ public class Consumable implements Collectible
     public String getName() { return name; }
     public int getCapacity() { return capacity; }
     public String getStat() { return stat; }
-    public SimpleBooleanProperty isEmptyProperty() { return isEmpty; }
+    public SimpleBooleanProperty isEmpty() { return isEmpty; }
     @Override
     public int getWeight() { return 1; }
 
