@@ -11,7 +11,6 @@ public class Dice
     {
         this.faces = faces;
         random = new Random();
-        random.setSeed(55555);
     }
 
     public int roll() { return random.nextInt(faces); }
