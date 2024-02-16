@@ -2,6 +2,7 @@ package lsg.graphics.widgets.skills;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Rectangle;
 
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -17,6 +18,8 @@ public class SkillBar extends HBox
         DEFAULT_BINDING.put(KeyCode.DIGIT4, "'");
         DEFAULT_BINDING.put(KeyCode.DIGIT5, "(");
     }
+
+    private ConsumableTrigger consumableTrigger = new ConsumableTrigger(KeyCode.C, "c", null, null);
 
     private SkillTrigger[] triggers;
 
@@ -41,13 +44,28 @@ public class SkillBar extends HBox
             this.getChildren().add(triggers[i]);
             i++;
         }
+
+        // Ajout d'un rectangle pour inserer un espace
+        this.getChildren().add(new Rectangle(30, 30));
+
+        // Ajout du trigger de consommable
+        this.getChildren().add(consumableTrigger);
     }
+
+    public ConsumableTrigger getConsumableTrigger() { return consumableTrigger; }
 
     public SkillTrigger getTrigger(int i) { return triggers[i]; }
 
     public void process(KeyCode code)
     {
         if (disabledProperty().get()) { return; }
+
+        if (code == consumableTrigger.getKeyCode())
+        {
+            consumableTrigger.trigger();
+            return;
+        }
+
         for (SkillTrigger trigger : triggers)
         {
             if (Objects.equals(trigger.getKeyCode(), code))
