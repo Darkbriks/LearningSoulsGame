@@ -1,5 +1,6 @@
 package lsg.consumables;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import lsg.bags.Collectible;
 import lsg.exceptions.ConsumeEmptyException;
 
@@ -9,6 +10,7 @@ public class Consumable implements Collectible
     private String name;
     private int capacity;
     private String stat;
+    private SimpleBooleanProperty isEmpty;
 
     /////////////// CONSTRUCTOR ///////////////
     public Consumable(String name, int capacity, String stat)
@@ -16,17 +18,23 @@ public class Consumable implements Collectible
         this.name = name;
         this.capacity = capacity;
         this.stat = stat;
+        this.isEmpty = new SimpleBooleanProperty(capacity == 0);
     }
 
     /////////////// GETTERS ///////////////
     public String getName() { return name; }
     public int getCapacity() { return capacity; }
     public String getStat() { return stat; }
+    public SimpleBooleanProperty isEmptyProperty() { return isEmpty; }
     @Override
     public int getWeight() { return 1; }
 
     /////////////// SETTERS ///////////////
-    protected void setCapacity(int capacity) { this.capacity = capacity; }
+    protected void setCapacity(int capacity)
+    {
+        this.capacity = capacity;
+        isEmpty.set(capacity == 0);
+    }
 
     /////////////// METHODS ///////////////
     public int use() throws ConsumeEmptyException
