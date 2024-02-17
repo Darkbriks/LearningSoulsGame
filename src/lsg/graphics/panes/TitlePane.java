@@ -1,4 +1,5 @@
 package lsg.graphics.panes;
+import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -58,5 +59,15 @@ public class TitlePane extends VBox
         pt.setCycleCount(1);
         pt.setOnFinished(finishedHandler);
         pt.play();
+    }
+
+    public void fadeOut(EventHandler<ActionEvent> finishedHandler)
+    {
+        FadeTransition ft = new FadeTransition(Constants.TITLE_ANIMATION_DURATION);
+        ft.setToValue(0);
+        ft.setNode(this);
+        ft.setCycleCount(1);
+        ft.setOnFinished(finishedHandler);
+        ft.play();
     }
 }
