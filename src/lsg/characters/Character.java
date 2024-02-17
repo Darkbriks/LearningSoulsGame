@@ -144,10 +144,10 @@ public abstract class Character
         if (!weapon.isBroken() && isAlive())
         {
             int precision = dice.roll();
-            damage = weapon.getMinDamage() + lerp(0, weapon.getMaxDamage() - weapon.getMinDamage(), precision / 100.0);
+            damage = weapon.getMinDamage() + lerp(weapon.getMaxDamage() - weapon.getMinDamage(), precision / 100.0);
             damage += damage * computeBuff();
             int overflow = setStamina(stamina - weapon.getStamCost());
-            if (overflow < 0) { damage = lerp(0, damage, 1 + overflow / (double) weapon.getStamCost()); }
+            if (overflow < 0) { damage = lerp(damage, 1 + overflow / (double) weapon.getStamCost()); }
             weapon.use();
         }
         return (int) Math.round(damage);
@@ -185,6 +185,7 @@ public abstract class Character
     }
 
     private double lerp(double v1, double v2, double t) { return (v1 + (v2 - v1) * t); }
+    private double lerp(double v2, double t) { return (v2 * t); }
 
     private <T extends Consumable> Consumable fastUseFirst(Class<T> type)
             throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
@@ -224,7 +225,7 @@ public abstract class Character
     public int getHitWith(int value)
     {
         int minor = (life - value >= 0) ? value : life;
-        minor = (int) Math.round(lerp(0, minor, 1 - this.computeProtection() / 100));
+        minor = (int) Math.round(lerp(minor, 1 - this.computeProtection() / 100));
         this.setLife(life - minor);
         return minor;
     }
@@ -256,7 +257,7 @@ public abstract class Character
         {
             bag.push(item);
             if (bag.contains(item)) { System.out.printf("%s picks up %s%n", name, item.toString()); }
-            else { System.out.printf("%s's bag is full, he can't pick up %s%n", name, name, item.toString()); }
+            else { System.out.printf("%s's bag is full, he can't pick up %s%n", name, item.toString()); }
         }
     }
 

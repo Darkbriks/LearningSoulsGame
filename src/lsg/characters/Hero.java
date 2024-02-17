@@ -7,7 +7,7 @@ import lsg.utils.Constants;
 public class Hero extends Character
 {
     /////////////// FIELDS ///////////////
-    private ArmorItem[] armor = new ArmorItem[Constants.HERO_MAX_ARMOR_PIECES];
+    private final ArmorItem[] armor = new ArmorItem[Constants.HERO_MAX_ARMOR_PIECES];
     private int lifeRegen;
     private int stamRegen;
 

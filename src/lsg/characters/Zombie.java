@@ -1,6 +1,5 @@
 package lsg.characters;
 
-import lsg.weapons.Claw;
 import lsg.weapons.Weapon;
 
 public class Zombie extends Monster
