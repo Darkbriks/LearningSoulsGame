@@ -108,7 +108,8 @@ public class LearningSoulsGameApplication extends Application
 
     private void createHero()
     {
-        hero = new Hero(heroName);
+        if (heroName == null || heroName.isEmpty() || heroName.replace(" ", "").isEmpty()) { hero = new Hero(); }
+        else { hero = new Hero(heroName); }
         hero.setWeapon(new Sword());
         hero.setConsumable(new SuperBerry());
         heroRenderer = animationPane.createHeroRenderer();
@@ -154,13 +155,9 @@ public class LearningSoulsGameApplication extends Application
         creationPane.getNameField().setOnAction(event1 ->
         {
             heroName = creationPane.getNameField().getText();
-            System.out.println("Hero name is: " + heroName);
-            if (heroName != null && !heroName.isEmpty())
-            {
-                root.getChildren().remove(creationPane);
-                creationPane = null;
-                gameTitle.zoomOut(event2 -> play());
-            }
+            root.getChildren().remove(creationPane);
+            creationPane = null;
+            gameTitle.zoomOut(event2 -> play());
         });
     }
 
