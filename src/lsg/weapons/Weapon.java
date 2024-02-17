@@ -7,10 +7,10 @@ import lsg.utils.Constants;
 public class Weapon implements Collectible
 {
     /////////////// FIELDS ///////////////
-    private String name;
-    private int minDamage;
-    private int maxDamage;
-    private int stamCost;
+    private final String name;
+    private final int minDamage;
+    private final int maxDamage;
+    private final int stamCost;
     private int durability;
 
     /////////////// CONSTRUCTORS ///////////////
