@@ -42,13 +42,13 @@ public class LearningSoulsGameApplication extends Application
     private ZombieRenderer zombieRenderer;
     private HUDPane hudPane;
     private SkillBar skillBar;
-    private BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
-    private IntegerProperty score = new SimpleIntegerProperty();
+    private final BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
+    private final IntegerProperty score = new SimpleIntegerProperty();
 
     public static void main(String[] args) { launch(args); }
 
     @Override
-    public void start(Stage stage) throws Exception
+    public void start(Stage stage)
     {
         stage.setTitle(Constants.GAME_TITLE);
         root = new AnchorPane();
@@ -171,18 +171,6 @@ public class LearningSoulsGameApplication extends Application
         hudPane.scoreProperty().bind(score);
     }
 
-    private void test()
-    {
-        try {
-            int dmg = hero.attack();
-            System.out.println(hero.getName() + " attack " + zombie.getName() +
-                    " with " + hero.getWeapon().getName() + " (" + dmg +
-                    ") -> Effective DMG: " + zombie.getHitWith(dmg) + " PV");
-        } catch (Exception e) {
-            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> root.getChildren().remove(hudPane.getMessagePane()));
-        }
-    }
-
     /**
      * Methode qui gere l'attaque et le coup porté par un agresseur sur sa cible,
      * aussi bien du poin de vue du modele (Character),
@@ -258,7 +246,12 @@ public class LearningSoulsGameApplication extends Application
         });
     }
 
-    private void gameOver() { hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> System.exit(0)))); }
+    private void gameOver() { hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
+        hudPane = null;
+        animationPane = null;
+        gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> System.exit(0)));
+    });
+    }
 
     private void finishTurn()
     {

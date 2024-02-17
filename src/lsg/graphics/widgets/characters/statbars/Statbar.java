@@ -10,10 +10,10 @@ import lsg.graphics.widgets.texts.GameLabel;
 public class Statbar extends BorderPane
 {
     private ImageView avatar;
-    private GameLabel name;
-    private ProgressBar lifeBar;
-    private ProgressBar staminaBar;
-    private BorderPane rightPane;
+    private final GameLabel name;
+    private final ProgressBar lifeBar;
+    private final ProgressBar staminaBar;
+    private final BorderPane rightPane;
 
     public ImageView getAvatar() { return avatar; }
     public GameLabel getName() { return name; }
@@ -38,7 +38,14 @@ public class Statbar extends BorderPane
         rightPane = new BorderPane();
 
         name = new GameLabel("Name");
-        name.setStyle("-fx-font-size: 33px;");
+
+        // Si le nom du personnage est trop long, on réduit la taille de la police
+        name.textProperty().addListener((o, oldVal, newVal) -> {
+            if (newVal.length() > 16) { name.setStyle("-fx-font-size: 18;"); }
+            else if (newVal.length() > 12) { name.setStyle("-fx-font-size: 25px;"); }
+            else { name.setStyle("-fx-font-size: 33px;"); }
+        });
+
         name.setMinWidth(200);
         name.setMaxWidth(200);
         rightPane.setTop(name);

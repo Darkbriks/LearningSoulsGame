@@ -47,17 +47,12 @@ public class HUDPane extends BorderPane
         topPane.setRight(monsterStatbar);
         monsterStatbar.flip();
 
-        // Dans buildTop(), instanciez et ajoutez scoreLabel au centre avec:
-        // texte de départ: «0»
-        // un scalingde 1.3
-        // une translation sur l’axe Y de 40px
         scoreLabel = new GameLabel("0");
         scoreLabel.setScaleX(1.3);
         scoreLabel.setScaleY(1.3);
         scoreLabel.setTranslateY(75);
         topPane.setCenter(scoreLabel);
 
-        // ajoutez un listener sur score pour  faire  en  sorte  que  les modifications de score soient répercutées sur le texte affiché dans scoreLabel.
         score.addListener((o, oldVal, newVal) -> scoreLabel.setText(newVal.toString()));
     }
 

@@ -5,10 +5,8 @@ import javafx.util.Duration;
 public class Constants
 {
     /////////////// CHARACTER ///////////////
-    public static final String CHARACTER_NAME_STAT_STRING = "name";
     public static final String CHARACTER_LIFE_STAT_STRING = "life";
     public static final String CHARACTER_STAM_STAT_STRING = "stamina";
-    public static final String CHARACTER_WEAPON_STAT_STRING = "weapon";
     public static final String CHARACTER_PROTECTION_STAT_STRING = "protection";
     public static final String CHARACTER_BUFFS_STAT_STRING = "buff";
 
@@ -27,7 +25,6 @@ public class Constants
     public static final int MONSTER_MAX_BUFF_PIECES = 1;
 
     /////////////// WEAPON ///////////////
-    public static final String WEAPON_NAME_STAT_STRING = "name";
     public static final String WEAPON_MIN_DMG_STAT_STRING = "minDamage";
     public static final String WEAPON_MAX_DMG_STAT_STRING = "maxDamage";
     public static final String WEAPON_STAM_COST_STAT_STRING = "stamCost";
@@ -39,7 +36,7 @@ public class Constants
 
     /////////////// GAME DISPLAY ///////////////
     public static final String GAME_TITLE = "Learning Souls Game";
-    public static final String GAME_VERSION = "0.1.4";
+    public static final String GAME_VERSION = "0.1.5";
     public static final String GAME_CSS = "LSG.css";
     public static final int GAME_WIDTH = 1200;
     public static final int GAME_HEIGHT = 800;
