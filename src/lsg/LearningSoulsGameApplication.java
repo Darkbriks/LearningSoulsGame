@@ -67,7 +67,6 @@ public class LearningSoulsGameApplication extends Application
         gameTitle = new TitlePane(scene, Constants.GAME_TITLE);
         root.getChildren().add(gameTitle);
         AnchorPane.setTopAnchor(gameTitle, 10.);
-        // Center the title
         gameTitle.translateXProperty().bind(scene.widthProperty().subtract(gameTitle.widthProperty()).divide(2));
 
         creationPane = new CreationPane();
@@ -80,7 +79,7 @@ public class LearningSoulsGameApplication extends Application
         animationPane = new AnimationPane(root);
 
         hudPane = new HUDPane();
-        // Ancrez pour qu’il occupe tout l’espace
+
         AnchorPane.setTopAnchor(hudPane, 0.);
         AnchorPane.setBottomAnchor(hudPane, 0.);
         AnchorPane.setLeftAnchor(hudPane, 0.);
@@ -116,7 +115,7 @@ public class LearningSoulsGameApplication extends Application
         animationPane.initHeroInScene(heroRenderer);
         hudPane.getHeroStatbar().getName().setText(hero.getName());
         // Add padding to the statbar
-        hudPane.getHeroStatbar().setPadding(new javafx.geometry.Insets(25, 0, 0, 0));
+        hudPane.getHeroStatbar().setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
         hudPane.getHeroStatbar().getLifeBar().progressProperty().bind(hero.lifeRateProperty());
         hudPane.getHeroStatbar().getStaminaBar().progressProperty().bind(hero.staminaRateProperty());
     }
@@ -135,7 +134,7 @@ public class LearningSoulsGameApplication extends Application
         }
 
         // Add padding to the statbar
-        hudPane.getMonsterStatbar().setPadding(new javafx.geometry.Insets(25, 0, 0, 0));
+        hudPane.getMonsterStatbar().setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
         hudPane.getMonsterStatbar().getLifeBar().progressProperty().bind(zombie.lifeRateProperty());
         hudPane.getMonsterStatbar().getStaminaBar().progressProperty().bind(zombie.staminaRateProperty());
     }
@@ -166,8 +165,7 @@ public class LearningSoulsGameApplication extends Application
         root.getChildren().add(hudPane);
         createHero();
         createSkills();
-        createMonster(event -> hudPane.getMessagePane().showMessage("Fight !", 4,
-                event1 -> heroCanPlay.setValue(true)));
+        createMonster(event -> hudPane.getMessagePane().showMessage("Fight !", 4, event1 -> heroCanPlay.setValue(true)));
         hudPane.scoreProperty().bind(score);
     }
 
@@ -185,13 +183,6 @@ public class LearningSoulsGameApplication extends Application
     {
         try
         {
-            // Calcul de l'attaque de l'agresseur (attack de Character)
-            // Animation attack de l'agresseur (CharacterRenderer)
-            // Calcul du coup sur la cible (getHitWithde Character)
-            // Si la cible est encore vivant: animation hurt de CharacterRenderer
-            // Si la cible est morte: animation die de CharacterRenderer
-            // Lorsque l’animation est terminée, déclenchement du finishedHandler
-
             int dmg = agressor.attack();
 
             agressorR.attack(event -> {
@@ -201,10 +192,8 @@ public class LearningSoulsGameApplication extends Application
             });
 
         }
-        catch (Exception e) {
-            // Lancer (quand même) l’animation d’attaque (même s’il n’y a aucun dégât, pour simuler un coup dans le vide)
-            // Afficher un message adéquat dans hudPane.messagePane
-            // Lorsque l’animation est terminée, déclenchement du finishedHandler
+        catch (Exception e)
+        {
             agressorR.attack(event -> hudPane.getMessagePane().showMessage(e.getMessage(), 1, event1 -> {
                     root.getChildren().remove(hudPane.getMessagePane());
                     finishHandler.handle(null);
@@ -222,7 +211,7 @@ public class LearningSoulsGameApplication extends Application
     {
         heroCanPlay.setValue(false);
         hero.recuperate();
-        hudPane.getMessagePane().showMessage("Vous regagnez de la force et de la vie !", 1, event -> finishTurn());
+        hudPane.getMessagePane().showMessage("You recuperate life and stamina", 1, event -> finishTurn());
     }
 
     private void heroConsume()
@@ -232,7 +221,7 @@ public class LearningSoulsGameApplication extends Application
             int life = hero.getLife();
             hero.use(hero.getConsumable());
             System.out.println(hero.getName() + " consumes a " + hero.getConsumable().getName() + " -> +" + (hero.getLife() - life) + " Life");
-            hudPane.getMessagePane().showMessage("Vous avez utilisé votre consommable", 1, event -> finishTurn());
+            hudPane.getMessagePane().showMessage("You consume a " + hero.getConsumable().getName() + "\n\t\t + " + (hero.getLife() - life) + " Life", 1, event -> finishTurn());
         } catch (Exception e) {
             hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> finishTurn());
         }
@@ -258,9 +247,6 @@ public class LearningSoulsGameApplication extends Application
         if (zombie.isAlive()) { monsterAttack(); }
         else
         {
-            // retire le zombieRenderer(mort) des children d’animationPane
-            // crée un nouveau monstre (appel de createMonster)
-            // lorsque qu'il est en place, le fait attaquer
             animationPane.getChildren().remove(zombieRenderer);
             score.setValue(score.getValue() + 1);
             createMonster(event -> monsterAttack());
