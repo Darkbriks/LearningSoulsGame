@@ -16,5 +16,5 @@ public interface Collectible
      * Méthode permettant de récupérer le poids de l'objet
      * @return le poids de l'objet
      */
-    public int getWeight();
+    int getWeight();
 }

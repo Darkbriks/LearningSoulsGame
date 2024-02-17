@@ -28,7 +28,7 @@ public class Bag
     /**
      * Liste des objets actuellement dans le sac (HashSet<Collectible>) (private)
      */
-    private HashSet<Collectible> items;
+    private final HashSet<Collectible> items;
 
     /////////////// CONSTRUCTEUR ///////////////
     /**
@@ -118,26 +118,9 @@ public class Bag
     @Override
     public String toString()
     {
-        String string = String.format("Bag [%d | %d/%d kg ]", items.size(), weight, capacity);
+        StringBuilder string = new StringBuilder(String.format("Bag [%d | %d/%d kg ]", items.size(), weight, capacity));
         if (items.isEmpty()) { return string + "\n" + Constants.BULLET_POINT + "Empty"; }
-        for (Collectible item : items) { string += "\n" + Constants.BULLET_POINT + item.toString() + "[" + item.getWeight() + " kg]"; }
-        return string;
+        for (Collectible item : items) { string.append("\n" + Constants.BULLET_POINT).append(item.toString()).append("[").append(item.getWeight()).append(" kg]"); }
+        return string.toString();
     }
-
-    ///////////// TEST ///////////////
-    /*public static void main(String[] args) {
-        Bag bag = new SmallBag();
-        System.out.println(bag);
-        ShotGun sg = new ShotGun();
-        bag.push(sg);
-        bag.push(new DragonSlayerLeggings());
-        bag.push(new RingedKnightArmor());
-        bag.push(new RepairKit());
-        bag.push(new Coffee());
-        System.out.println(bag);
-        System.out.println(bag.contains(sg));
-        bag.pop(sg);
-        System.out.println(bag);
-        System.out.println(bag.contains(sg));
-    }*/
 }
