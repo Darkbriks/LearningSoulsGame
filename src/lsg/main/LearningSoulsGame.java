@@ -1,25 +1,17 @@
 package lsg.main;
 
 import lsg.armor.BlackWitchVeil;
-import lsg.armor.DragonSlayerLeggings;
 import lsg.armor.RingedKnightArmor;
-import lsg.bags.MediumBag;
 import lsg.buffs.rings.RingOfDeath;
 import lsg.buffs.rings.RingOfSwords;
 import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Lycanthrope;
 import lsg.characters.Monster;
-import lsg.consumables.Consumable;
 import lsg.consumables.drinks.Coffee;
-import lsg.consumables.drinks.Whisky;
-import lsg.consumables.food.Hamburger;
-import lsg.consumables.menu.MenuBestOfV4;
 import lsg.consumables.repair.RepairKit;
 import lsg.exceptions.*;
-import lsg.utils.Constants;
 import lsg.weapons.Claw;
-import lsg.weapons.ShotGun;
 import lsg.weapons.Sword;
 
 import java.util.Scanner;
@@ -134,7 +126,6 @@ public class LearningSoulsGame
 
     private void init()
     {
-        // TODO : check why buffs is not working
         title();
         hero = new Hero("Darkbriks");
         hero.setArmorItem(new BlackWitchVeil(), 1);
