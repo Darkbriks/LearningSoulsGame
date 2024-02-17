@@ -2,7 +2,6 @@ package lsg.graphics.panes;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -12,9 +11,8 @@ import lsg.utils.Constants;
 
 public class CreationPane extends VBox
 {
-    private TextField nameField;
-    private GameLabel nameLabel;
-    private GameLabel versionLabel;
+    private final TextField nameField;
+    private final GameLabel nameLabel;
 
     public TextField getNameField() { return nameField; }
 
@@ -30,7 +28,7 @@ public class CreationPane extends VBox
         nameField.setFocusTraversable(false);
         this.getChildren().add(nameField);
 
-        versionLabel = new GameLabel("Version " + Constants.GAME_VERSION);
+        GameLabel versionLabel = new GameLabel("Version " + Constants.GAME_VERSION);
         versionLabel.setScaleX(0.25);
         versionLabel.setScaleY(0.25);
         versionLabel.setTranslateY(650);
