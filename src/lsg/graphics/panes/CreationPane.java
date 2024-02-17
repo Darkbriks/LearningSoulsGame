@@ -32,7 +32,7 @@ public class CreationPane extends VBox
         versionLabel.setScaleX(0.25);
         versionLabel.setScaleY(0.25);
         versionLabel.setTranslateY(650);
-        versionLabel.setTranslateX(975);
+        versionLabel.setTranslateX(900);
         this.getChildren().add(versionLabel);
 
         this.getStylesheets().add(CSSFactory.getStyleSheet("LSGFont.css"));
