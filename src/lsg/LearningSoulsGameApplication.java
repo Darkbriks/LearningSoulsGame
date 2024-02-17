@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lsg.characters.Character;
@@ -26,7 +25,6 @@ import lsg.graphics.widgets.characters.renderers.CharacterRenderer;
 import lsg.graphics.widgets.characters.renderers.HeroRenderer;
 import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
-import lsg.graphics.widgets.texts.GameLabel;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
 
@@ -46,6 +44,8 @@ public class LearningSoulsGameApplication extends Application
     private SkillBar skillBar;
     private BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
     private IntegerProperty score = new SimpleIntegerProperty();
+
+    public static void main(String[] args) { launch(args); }
 
     @Override
     public void start(Stage stage) throws Exception
@@ -103,10 +103,7 @@ public class LearningSoulsGameApplication extends Application
         skillBar.getConsumableTrigger().setConsumable(hero.getConsumable());
         skillBar.getConsumableTrigger().setAction(this::heroConsume);
 
-        scene.setOnKeyReleased(event -> {
-            skillBar.process(event.getCode());
-            System.out.println("Key released: " + event.getCode());
-        });
+        scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
     }
 
     private void createHero()
@@ -199,7 +196,7 @@ public class LearningSoulsGameApplication extends Application
      * @param targetR : la representation de la cible (pour l'animation hurt ou die)
      * @param finishHandler : appele lorsque les calculs et les animations sont terminées
      */
-    private void charcterAttack(Character agressor, CharacterRenderer agressorR, Character target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
+    private void characterAttack(Character agressor, CharacterRenderer agressorR, Character target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
     {
         try
         {
@@ -213,8 +210,8 @@ public class LearningSoulsGameApplication extends Application
             int dmg = agressor.attack();
 
             agressorR.attack(event -> {
-                int hit = target.getHitWith(dmg);
-                if (hit > 0) { targetR.hurt(event1 -> finishHandler.handle(null)); }
+                target.getHitWith(dmg);
+                if (target.isAlive()) { targetR.hurt(event1 -> finishHandler.handle(null)); }
                 else { targetR.die(event1 -> finishHandler.handle(null)); }
             });
 
@@ -233,7 +230,7 @@ public class LearningSoulsGameApplication extends Application
     private void heroAttack()
     {
         heroCanPlay.setValue(false);
-        charcterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> finishTurn());
+        characterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> finishTurn());
     }
 
     private void heroRecuperate()
@@ -258,13 +255,13 @@ public class LearningSoulsGameApplication extends Application
 
     private void monsterAttack()
     {
-        charcterAttack(zombie, zombieRenderer, hero, heroRenderer, event -> {
+        characterAttack(zombie, zombieRenderer, hero, heroRenderer, event -> {
             if (hero.isAlive()) { heroCanPlay.setValue(true); }
             else { gameOver(); }
         });
     }
 
-    private void gameOver() { heroRenderer.die(event -> hudPane.getMessagePane().showMessage("Game Over", 3, event1 -> System.exit(0))); }
+    private void gameOver() { hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> System.exit(0)))); }
 
     private void finishTurn()
     {
