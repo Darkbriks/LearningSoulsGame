@@ -1,11 +1,5 @@
 package lsg.graphics;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -15,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ImageFactory {
@@ -47,7 +41,7 @@ public class ImageFactory {
         SPRITES_ID(String path) { this.path = path ; }
     }
 
-    private static HashMap<SPRITES_ID, Image[]> sprites = new HashMap<>() ;
+    private static final HashMap<SPRITES_ID, Image[]> sprites = new HashMap<>() ;
 
     /**
      * Permet de précharger toutes les images du jeu en tâche de fond
@@ -61,10 +55,8 @@ public class ImageFactory {
                     load(id);
                 }
                 if(finishedHandler != null) finishedHandler.run();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (URISyntaxException | IOException e) {
+                System.err.println("Error in ImageFactory.preloadAll() : " + e.getMessage());
             }
         }).start();
     }
@@ -79,10 +71,8 @@ public class ImageFactory {
         if(images == null) {
             try {
                 images = load(id) ;
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (URISyntaxException | IOException e) {
+                System.err.println("Error in ImageFactory.getSprites() : " + e.getMessage());
             }
         }
         return images ;
@@ -90,7 +80,7 @@ public class ImageFactory {
 
     private static Image[] load(SPRITES_ID id) throws URISyntaxException, IOException {
         String pathName = id.path ;
-        Path path = Paths.get(ImageFactory.class.getResource(pathName).toURI()) ;
+        Path path = Paths.get(Objects.requireNonNull(ImageFactory.class.getResource(pathName)).toURI()) ;
         Image[] images ;
         if(Files.isDirectory(path)){
             List<Path> paths = Files.list(path).filter(f -> !(Files.isDirectory(f))).sorted().collect(Collectors.toList()) ;
@@ -98,12 +88,12 @@ public class ImageFactory {
             int i=0 ;
             for (Path p: paths){
                 String name = pathName + p.getFileName() ;
-                images[i] = new Image(ImageFactory.class.getResource(name).toExternalForm());
-                int finalI = i;
+                images[i] = new Image(Objects.requireNonNull(ImageFactory.class.getResource(name)).toExternalForm());
+                //int finalI = i;
                 i++ ;
             }
         }else{
-            images = new Image[]{ new Image(ImageFactory.class.getResource(id.path).toExternalForm()) };
+            images = new Image[]{ new Image(Objects.requireNonNull(ImageFactory.class.getResource(id.path)).toExternalForm()) };
         }
 
         ImageFactory.sprites.put(id, images) ;

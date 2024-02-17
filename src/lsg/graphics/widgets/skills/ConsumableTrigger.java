@@ -21,7 +21,7 @@ public class ConsumableTrigger extends SkillTrigger
 
     /**
      * Permet d'associer un consommable au trigger
-     * @param consumable
+     * @param consumable : le consommable
      */
     public void setConsumable(Consumable consumable)
     {

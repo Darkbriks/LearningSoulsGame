@@ -24,7 +24,6 @@ public class Statbar extends BorderPane
     {
         this.setHeight(100);
         this.setWidth(350);
-        //this.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
 
         Image[] imgs = ImageFactory.getSprites(ImageFactory.SPRITES_ID.HERO_HEAD);
         if (imgs != null)

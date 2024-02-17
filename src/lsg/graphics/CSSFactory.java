@@ -1,11 +1,13 @@
 package lsg.graphics;
 
+import java.util.Objects;
+
 public class CSSFactory
 {
-    private static String CSS_DIR = "css/";
+    private final static String CSS_DIR = "css/";
 
     public static String getStyleSheet(String filename)
     {
-        return CSSFactory.class.getResource(CSS_DIR + filename).toExternalForm();
+        return Objects.requireNonNull(CSSFactory.class.getResource(CSS_DIR + filename)).toExternalForm();
     }
 }

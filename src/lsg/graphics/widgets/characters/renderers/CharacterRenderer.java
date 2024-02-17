@@ -20,12 +20,12 @@ public abstract class CharacterRenderer extends ImageView {
 
     private final int FPS = 12 ;
 
-    private Image IDLE_SPRITES[], WALK_SPRITES[], ATTACK_SPRITES[], HURT_SPRITES[], DIE_SPRITES[] ;
+    private Image[] IDLE_SPRITES, WALK_SPRITES, ATTACK_SPRITES, HURT_SPRITES, DIE_SPRITES;
 
-    private HashMap<TL_NAME, HashSet<KeyFrame>> frames = new HashMap<>() ;
+    private final HashMap<TL_NAME, HashSet<KeyFrame>> frames = new HashMap<>() ;
 
-    private Timeline animationTl = new Timeline() ;
-    private Timeline gotoTl = new Timeline() ;
+    private final Timeline animationTl = new Timeline() ;
+    private final Timeline gotoTl = new Timeline() ;
 
     public CharacterRenderer() {
         setPreserveRatio(true);
@@ -131,7 +131,7 @@ public abstract class CharacterRenderer extends ImageView {
         kfs = new HashSet<>() ;
         for(int i=0 ; i < IDLE_SPRITES.length ; i++){
             final int frame = i ;
-            kf = new KeyFrame(Duration.millis(frame*1000/FPS), new EventHandler<ActionEvent>() {
+            kf = new KeyFrame(Duration.millis((double) (frame * 1000) /FPS), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     CharacterRenderer.this.setImage(IDLE_SPRITES[frame]);
@@ -145,7 +145,7 @@ public abstract class CharacterRenderer extends ImageView {
         kfs = new HashSet<>() ;
         for(int i=0 ; i<WALK_SPRITES.length ; i++){
             final int frame = i ;
-            kf = new KeyFrame(Duration.millis(frame*1000/FPS), new EventHandler<ActionEvent>() {
+            kf = new KeyFrame(Duration.millis((double) (frame * 1000) /FPS), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     CharacterRenderer.this.setImage(WALK_SPRITES[frame]);
@@ -159,7 +159,7 @@ public abstract class CharacterRenderer extends ImageView {
         kfs = new HashSet<>() ;
         for(int i=0 ; i < ATTACK_SPRITES.length ; i++){
             final int frame = i ;
-            kf = new KeyFrame(Duration.millis(frame*1000/FPS), new EventHandler<ActionEvent>() {
+            kf = new KeyFrame(Duration.millis((double) (frame * 1000) /FPS), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     CharacterRenderer.this.setImage(ATTACK_SPRITES[frame]);
@@ -173,7 +173,7 @@ public abstract class CharacterRenderer extends ImageView {
         kfs = new HashSet<>() ;
         for(int i=0 ; i < HURT_SPRITES.length ; i++){
             final int frame = i ;
-            kf = new KeyFrame(Duration.millis(frame*1000/FPS), new EventHandler<ActionEvent>() {
+            kf = new KeyFrame(Duration.millis((double) (frame * 1000) /FPS), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     CharacterRenderer.this.setImage(HURT_SPRITES[frame]);
@@ -187,7 +187,7 @@ public abstract class CharacterRenderer extends ImageView {
         kfs = new HashSet<>() ;
         for(int i=0 ; i < DIE_SPRITES.length ; i++){
             final int frame = i ;
-            kf = new KeyFrame(Duration.millis(frame*1000/FPS), new EventHandler<ActionEvent>() {
+            kf = new KeyFrame(Duration.millis((double) (frame * 1000) /FPS), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     CharacterRenderer.this.setImage(DIE_SPRITES[frame]);

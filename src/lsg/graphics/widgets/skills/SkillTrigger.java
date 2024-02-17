@@ -12,11 +12,11 @@ import lsg.graphics.CSSFactory;
 
 public class SkillTrigger extends AnchorPane
 {
-    private ImageView view;
+    private final ImageView view;
     private Label text;
     private KeyCode keyCode;
     private SkillAction action = null;
-    private ColorAdjust desaturate;
+    private final ColorAdjust desaturate;
 
     public SkillTrigger(KeyCode keyCode, String text, Image image, SkillAction action)
     {

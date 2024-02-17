@@ -7,16 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import javafx.scene.transform.Scale;
-import javafx.util.Duration;
 import lsg.graphics.CSSFactory;
 import lsg.graphics.widgets.texts.GameLabel;
 import lsg.utils.Constants;
 
 public class TitlePane extends VBox
 {
-    private Scene scene;
-    private GameLabel title;
+    private final Scene scene;
+    private final GameLabel title;
     private static final double ZOOM_SCALE = 1.5;
     private static final double ZOOM_Y = 0.25;
 

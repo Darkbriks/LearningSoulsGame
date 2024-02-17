@@ -14,7 +14,7 @@ public class HUDPane extends BorderPane
     private Statbar monsterStatbar;
     private BorderPane topPane;
     private SkillBar skillBar;
-    private IntegerProperty score = new SimpleIntegerProperty();
+    private final IntegerProperty score = new SimpleIntegerProperty();
     private GameLabel scoreLabel;
 
     public MessagePane getMessagePane() { return messagePane; }

@@ -9,11 +9,10 @@ import javafx.event.EventHandler;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lsg.graphics.widgets.texts.GameLabel;
-import lsg.utils.Constants;
 
 public class MessagePane extends VBox
 {
-    private GameLabel label;
+    private final GameLabel label;
 
     public MessagePane()
     {

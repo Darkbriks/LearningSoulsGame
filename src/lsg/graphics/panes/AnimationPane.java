@@ -4,22 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import lsg.characters.Character;
-import lsg.characters.Hero;
-import lsg.characters.Monster;
-import lsg.graphics.widgets.characters.renderers.CharacterRenderer;
 import lsg.graphics.widgets.characters.renderers.HeroRenderer;
 import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 
 public class AnimationPane extends Pane {
 
-    private double groundY = 0.8 ;
+    private final double groundY = 0.8 ;
 
-    private AnchorPane parent ;
+    private final AnchorPane parent ;
 
     /**
      * Crée un panneau d'animation qui occupe tout l'espace de son parent
-     * @param parent
+     * @param parent : le parent
      */
     public AnimationPane(AnchorPane parent) {
         this.parent = parent ;

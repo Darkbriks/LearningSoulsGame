@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class SkillBar extends HBox
 {
-    private static LinkedHashMap<KeyCode, String> DEFAULT_BINDING = new LinkedHashMap<>();
+    private static final LinkedHashMap<KeyCode, String> DEFAULT_BINDING = new LinkedHashMap<>();
     static
     {
         DEFAULT_BINDING.put(KeyCode.DIGIT1, "&");
@@ -19,7 +19,7 @@ public class SkillBar extends HBox
         DEFAULT_BINDING.put(KeyCode.DIGIT5, "(");
     }
 
-    private ConsumableTrigger consumableTrigger = new ConsumableTrigger(KeyCode.C, "c", null, null);
+    private final ConsumableTrigger consumableTrigger = new ConsumableTrigger(KeyCode.C, "c", null, null);
 
     private SkillTrigger[] triggers;
 
