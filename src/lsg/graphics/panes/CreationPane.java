@@ -14,6 +14,7 @@ public class CreationPane extends VBox
 {
     private TextField nameField;
     private GameLabel nameLabel;
+    private GameLabel versionLabel;
 
     public TextField getNameField() { return nameField; }
 
@@ -29,12 +30,20 @@ public class CreationPane extends VBox
         nameField.setFocusTraversable(false);
         this.getChildren().add(nameField);
 
+        versionLabel = new GameLabel("Version " + Constants.GAME_VERSION);
+        versionLabel.setScaleX(0.25);
+        versionLabel.setScaleY(0.25);
+        versionLabel.setTranslateY(650);
+        versionLabel.setTranslateX(975);
+        this.getChildren().add(versionLabel);
+
         this.getStylesheets().add(CSSFactory.getStyleSheet("LSGFont.css"));
         nameLabel.getStyleClass().addAll("game-font");
+        versionLabel.getStyleClass().addAll("game-font");
 
         this.nameLabel.translateXProperty().bind(this.widthProperty().subtract(this.nameLabel.widthProperty()).divide(2));
         this.nameField.translateXProperty().bind(this.widthProperty().subtract(this.nameField.widthProperty()).divide(2));
-        
+
         this.nameLabel.setTranslateY((double) Constants.GAME_HEIGHT /2 - this.nameLabel.getHeight()*1.25);
         this.nameField.setTranslateY((double) Constants.GAME_HEIGHT /2);
 
