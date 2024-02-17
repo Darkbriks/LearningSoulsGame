@@ -20,12 +20,12 @@ public class MenuBestOfV3 extends HashSet<Consumable>
     @Override
     public String toString()
     {
-        String str = getClass().getSimpleName() + ":\n";
+        StringBuilder str = new StringBuilder(getClass().getSimpleName() + ":\n");
         for (int i = 0; i < size(); ++i)
         {
-            str += String.format("   %d: %s\n", i + 1, toArray()[i]);
+            str.append(String.format("   %d: %s\n", i + 1, toArray()[i]));
         }
-        return str;
+        return str.toString();
     }
 
     // L'iteration sur un HashSet est renvoyee sans ordre particulier.

@@ -6,7 +6,7 @@ import lsg.consumables.food.*;
 
 public class MenuBestOfV1
 {
-    private Consumable[] menu;
+    private final Consumable[] menu;
 
     public MenuBestOfV1()
     {
@@ -21,11 +21,11 @@ public class MenuBestOfV1
     @Override
     public String toString()
     {
-        String str = getClass().getSimpleName() + ":\n";
+        StringBuilder str = new StringBuilder(getClass().getSimpleName() + ":\n");
         for (int i = 0; i < menu.length; ++i)
         {
-            str += String.format("   %d: %s\n", i + 1, menu[i]);
+            str.append(String.format("   %d: %s\n", i + 1, menu[i]));
         }
-        return str;
+        return str.toString();
     }
 }

@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public class MenuBestOfV2
 {
-    private HashSet<Consumable> menu;
+    private final HashSet<Consumable> menu;
 
     public MenuBestOfV2()
     {
@@ -23,11 +23,11 @@ public class MenuBestOfV2
     @Override
     public String toString()
     {
-        String str = getClass().getSimpleName() + ":\n";
+        StringBuilder str = new StringBuilder(getClass().getSimpleName() + ":\n");
         for (int i = 0; i < menu.size(); ++i)
         {
-            str += String.format("   %d: %s\n", i + 1, menu.toArray()[i]);
+            str.append(String.format("   %d: %s\n", i + 1, menu.toArray()[i]));
         }
-        return str;
+        return str.toString();
     }
 }

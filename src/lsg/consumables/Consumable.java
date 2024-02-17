@@ -7,10 +7,10 @@ import lsg.exceptions.ConsumeEmptyException;
 public class Consumable implements Collectible
 {
     /////////////// FIELDS ///////////////
-    private String name;
+    private final String name;
     private int capacity;
-    private String stat;
-    private SimpleBooleanProperty isEmpty;
+    private final String stat;
+    private final SimpleBooleanProperty isEmpty;
 
     /////////////// CONSTRUCTOR ///////////////
     public Consumable(String name, int capacity, String stat)
