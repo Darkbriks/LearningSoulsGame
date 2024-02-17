@@ -1,17 +1,7 @@
 package lsg.utils;
 
-import lsg.armor.DragonSlayerLeggings;
-import lsg.armor.RingedKnightArmor;
-import lsg.bags.MediumBag;
 import lsg.characters.Hero;
 import lsg.characters.Monster;
-import lsg.consumables.Consumable;
-import lsg.consumables.drinks.Coffee;
-import lsg.consumables.drinks.Whisky;
-import lsg.consumables.food.Hamburger;
-import lsg.consumables.menu.MenuBestOfV4;
-import lsg.consumables.repair.RepairKit;
-import lsg.weapons.ShotGun;
 
 public class Test
 {
