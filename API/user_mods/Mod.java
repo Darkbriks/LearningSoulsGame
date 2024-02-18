@@ -1,5 +1,8 @@
 package user_mods;
 
+import lsg_api.ConsoleAPI;
+
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 
 public abstract class Mod
@@ -52,4 +55,12 @@ public abstract class Mod
     {
         return "Mod:\n" + name + "\n - " + description + "\n - " + version;
     }
+
+    public void log(String message) { ConsoleAPI.log(message); }
+    public void warn(String message) { ConsoleAPI.warn(message); }
+    public void error(String message) { ConsoleAPI.error(message); }
+    public void info(String message) { ConsoleAPI.info(message); }
+    public void debug(String message) { ConsoleAPI.debug(message); }
+    public void raw(String message) { ConsoleAPI.raw(message); }
+    public void print(String message, String prefix, OutputStream stream) { ConsoleAPI.print(message, prefix, stream); }
 }
