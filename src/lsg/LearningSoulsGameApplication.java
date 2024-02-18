@@ -31,6 +31,15 @@ import user_mods.ModLoader;
 
 public class LearningSoulsGameApplication extends Application
 {
+    ////////// SINGLETON //////////
+    private static LearningSoulsGameApplication instance = null;
+
+    public static LearningSoulsGameApplication getInstance()
+    {
+        return instance;
+    }
+
+    ////////// ATTRIBUTES //////////
     private Scene scene;
     private AnchorPane root;
     private TitlePane gameTitle;
@@ -47,11 +56,19 @@ public class LearningSoulsGameApplication extends Application
     private final IntegerProperty score = new SimpleIntegerProperty();
     private ModLoader modLoader;
 
+    ////////// GETTERS //////////
+    public Hero getHero() { return hero; }
+    public Zombie getZombie() { return zombie; }
+
+    ////////// MAIN //////////
     public static void main(String[] args) { launch(args); }
 
+    ////////// METHODS //////////
     @Override
     public void start(Stage stage)
     {
+        instance = this;
+
         modLoader = ModLoader.getInstance();
         modLoader.loadMods();
 
@@ -180,7 +197,10 @@ public class LearningSoulsGameApplication extends Application
         root.getChildren().add(hudPane);
         createHero();
         createSkills();
-        createMonster(event -> hudPane.getMessagePane().showMessage("Fight !", 4, event1 -> heroCanPlay.setValue(true)));
+        createMonster(event -> {
+                    ModLoader.getInstance().invoke("start");
+                    hudPane.getMessagePane().showMessage("Fight !", 4, event1 -> heroCanPlay.setValue(true));
+                });
         hudPane.scoreProperty().bind(score);
     }
 
@@ -250,7 +270,9 @@ public class LearningSoulsGameApplication extends Application
         });
     }
 
-    private void gameOver() { hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
+    private void gameOver()
+    {
+        hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
         hudPane.getChildren().clear();
         animationPane.getChildren().clear();
         gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> {
