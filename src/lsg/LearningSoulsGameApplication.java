@@ -27,6 +27,7 @@ import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
+import user_mods.ModLoader;
 
 public class LearningSoulsGameApplication extends Application
 {
@@ -44,20 +45,34 @@ public class LearningSoulsGameApplication extends Application
     private SkillBar skillBar;
     private final BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
     private final IntegerProperty score = new SimpleIntegerProperty();
+    private ModLoader modLoader;
 
     public static void main(String[] args) { launch(args); }
 
     @Override
     public void start(Stage stage)
     {
+        modLoader = ModLoader.getInstance();
+        modLoader.loadMods();
+
         stage.setTitle(Constants.GAME_TITLE);
         root = new AnchorPane();
         scene = new Scene(root, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         stage.setScene(scene);
         stage.resizableProperty().setValue(Boolean.FALSE);
+
+        // Ajouter une action pour fermer l'application
+        stage.setOnCloseRequest(event -> {
+            modLoader.unloadMods();
+            System.exit(0);
+        });
+
         buildUI();
         addListeners();
         stage.show();
+
+        modLoader.invoke("awake");
+
         startGame();
     }
 
@@ -236,9 +251,12 @@ public class LearningSoulsGameApplication extends Application
     }
 
     private void gameOver() { hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
-        hudPane = null;
-        animationPane = null;
-        gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> System.exit(0)));
+        hudPane.getChildren().clear();
+        animationPane.getChildren().clear();
+        gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> {
+            modLoader.unloadMods();
+            System.exit(0);
+        }));
     });
     }
 
