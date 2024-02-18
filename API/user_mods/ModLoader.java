@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.jar.JarFile;
 
 public class ModLoader
@@ -15,7 +15,7 @@ public class ModLoader
     public static final String DEVELLOPMENT_MODS_PATH = "src/user_mods";
     public static final String RELEASE_MODS_PATH = "mods";
     public static final String MODS_EXTENSION = ".jar";
-    private static HashSet<Mod> loadedMods;
+    private static LinkedHashSet<Mod> loadedMods;
     private static HashMap<Integer, URLClassLoader> urlClassLoaders;
     private static HashMap<Integer, JarFile> jarFiles;
 
@@ -32,7 +32,7 @@ public class ModLoader
 
     private ModLoader()
     {
-        loadedMods = new HashSet<>();
+        loadedMods = new LinkedHashSet<>();
         urlClassLoaders = new HashMap<>();
         jarFiles = new HashMap<>();
     }
@@ -66,12 +66,10 @@ public class ModLoader
             Class<?> modClass = classLoader.loadClass(modClassName);
             Mod newMod = (Mod) modClass.getDeclaredConstructor().newInstance();
 
-            ConsoleAPI.print("Mod loaded: " + newMod.getName(), "[ModLoader][loadMod] ", ConsoleAPI.infoStream);
+            //ConsoleAPI.print("Mod loaded: " + newMod.getName(), "[ModLoader][loadMod] ", ConsoleAPI.infoStream);
 
             Method onLoaded = modClass.getMethod("onLoaded");
             onLoaded.invoke(newMod);
-
-            ConsoleAPI.print("Mod onLoaded invoked: " + newMod.getName(), "[ModLoader][loadMod] ", ConsoleAPI.debugStream);
 
             loadedMods.add(newMod);
             urlClassLoaders.put(newMod.getId(), classLoader);
@@ -95,9 +93,10 @@ public class ModLoader
 
     public void unloadMods()
     {
-        for (Mod mod : loadedMods)
+        int size = loadedMods.size();
+        for (int i = 0; i < size; i++)
         {
-            unloadMod(mod);
+            unloadMod(loadedMods.iterator().next());
         }
     }
 
