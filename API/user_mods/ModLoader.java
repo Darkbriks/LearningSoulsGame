@@ -1,5 +1,7 @@
 package user_mods;
 
+import lsg_api.ConsoleAPI;
+
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -40,7 +42,7 @@ public class ModLoader
         File modsDir = new File(DEVELLOPMENT_MODS_PATH);
         File[] mods = modsDir.listFiles();
 
-        System.out.println("Debug: ModLoader.loadMods: " + modsDir.getAbsolutePath());
+        ConsoleAPI.print("Mod directory: " + modsDir.getAbsolutePath(), "[ModLoader][loadMods] ", ConsoleAPI.infoStream);
 
         if (mods != null)
         {
@@ -63,17 +65,19 @@ public class ModLoader
             String modClassName = jarFile.getManifest().getMainAttributes().getValue("Main-Class");
             Class<?> modClass = classLoader.loadClass(modClassName);
             Mod newMod = (Mod) modClass.getDeclaredConstructor().newInstance();
-            System.out.println("Debug: ModLoader.loadMod: " + newMod);
+
+            ConsoleAPI.print("Mod loaded: " + newMod.getName(), "[ModLoader][loadMod] ", ConsoleAPI.infoStream);
 
             Method onLoaded = modClass.getMethod("onLoaded");
             onLoaded.invoke(newMod);
-            System.out.println("Debug: ModLoader.loadMod: onLoaded invoked");
+
+            ConsoleAPI.print("Mod onLoaded invoked: " + newMod.getName(), "[ModLoader][loadMod] ", ConsoleAPI.debugStream);
 
             loadedMods.add(newMod);
             urlClassLoaders.put(newMod.getId(), classLoader);
             jarFiles.put(newMod.getId(), jarFile);
         }
-        catch (Exception e) { System.err.println("Error: ModLoader.loadMod: " + e); }
+        catch (Exception e) { ConsoleAPI.print("Error: ModLoader.loadMod: " + e, "[ModLoader][loadMod] ", ConsoleAPI.errorStream); }
     }
 
     public void invoke(String methodName)
@@ -84,7 +88,8 @@ public class ModLoader
             {
                 Method method = mod.getMethod(methodName);
                 if (method != null) { method.invoke(mod); }
-            } catch (Exception e) { System.err.println("Error: ModLoader.invoke: " + e); }
+            }
+            catch (Exception e) { ConsoleAPI.print("Error: ModLoader.invoke: " + e, "[ModLoader][invoke] ", ConsoleAPI.errorStream); }
         }
     }
 
@@ -112,7 +117,7 @@ public class ModLoader
             jarFiles.remove(mod.getId());
 
         }
-        catch (Exception e) { System.err.println("Error: ModLoader.unloadMod: " + e); }
+        catch (Exception e) { ConsoleAPI.print("Error: ModLoader.unloadMod: " + e, "[ModLoader][unloadMod] ", ConsoleAPI.errorStream); }
     }
 
 }
