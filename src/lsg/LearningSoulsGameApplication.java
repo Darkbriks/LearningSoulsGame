@@ -56,9 +56,13 @@ public class LearningSoulsGameApplication extends Application
     private final IntegerProperty score = new SimpleIntegerProperty();
     private ModLoader modLoader;
 
-    ////////// GETTERS //////////
+    ////////// GETTERS FOR API //////////
     public Hero getHero() { return hero; }
+    public HeroRenderer getHeroRenderer() { return heroRenderer; }
     public Zombie getZombie() { return zombie; }
+    public ZombieRenderer getZombieRenderer() { return zombieRenderer; }
+    public BooleanProperty getHeroCanPlay() { return heroCanPlay; }
+    public IntegerProperty getScore() { return score; }
 
     ////////// MAIN //////////
     public static void main(String[] args) { launch(args); }
