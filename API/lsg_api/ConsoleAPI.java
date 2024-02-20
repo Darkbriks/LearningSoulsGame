@@ -17,17 +17,17 @@ public class ConsoleAPI
         catch (Exception e) { System.err.println("ConsoleAPI.write: " + e.getMessage() + " - " + message); }
     }
 
-    public static void log(String message) { write(message, "[LOG] ", logStream); }
+    public static void log(String message) { write(message, "[LOG]", logStream); }
 
-    public static void warn(String message) { write(message, "[WARN] ", warnStream); }
+    public static void warn(String message) { write(message, "[WARN]", warnStream); }
 
-    public static void error(String message) { write(message, "[ERROR] ", errorStream); }
+    public static void error(String message) { write(message, "[ERROR]", errorStream); }
 
-    public static void info(String message) { write(message, "[INFO] ", infoStream); }
+    public static void info(String message) { write(message, "[INFO]", infoStream); }
 
-    public static void debug(String message) { write(message, "[DEBUG] ", debugStream); }
+    public static void debug(String message) { write(message, "[DEBUG]", debugStream); }
 
-    public static void raw(String message) { write(message, "[RAW] ", rawStream); }
+    public static void raw(String message) { write(message, "[RAW]", rawStream); }
 
     public static void print(String message, String prefix, OutputStream stream) { write(message, "[LSG_API]" + prefix, stream); }
 

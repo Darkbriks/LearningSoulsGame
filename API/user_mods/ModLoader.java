@@ -65,17 +65,21 @@ public class ModLoader
             String modClassName = jarFile.getManifest().getMainAttributes().getValue("Main-Class");
             Class<?> modClass = classLoader.loadClass(modClassName);
             Mod newMod = (Mod) modClass.getDeclaredConstructor().newInstance();
+            newMod.onLoaded();
 
-            //ConsoleAPI.print("Mod loaded: " + newMod.getName(), "[ModLoader][loadMod] ", ConsoleAPI.infoStream);
-
-            Method onLoaded = modClass.getMethod("onLoaded");
-            onLoaded.invoke(newMod);
+            String modClassWindow = jarFile.getManifest().getMainAttributes().getValue("Window-Class");
+            if (modClassWindow != null)
+            {
+                Class<?> windowClass = classLoader.loadClass(modClassWindow);
+                ModdedWindow window = (ModdedWindow) windowClass.getDeclaredConstructor().newInstance();
+                newMod.setWindow(window);
+            }
 
             loadedMods.add(newMod);
             urlClassLoaders.put(newMod.getId(), classLoader);
             jarFiles.put(newMod.getId(), jarFile);
         }
-        catch (Exception e) { ConsoleAPI.print("Error: ModLoader.loadMod: " + e, "[ModLoader][loadMod] ", ConsoleAPI.errorStream); }
+        catch (Exception e) { ConsoleAPI.print("Error: " + e, "[ModLoader][loadMod] ", ConsoleAPI.errorStream); }
     }
 
     public void invoke(String methodName)
@@ -104,8 +108,7 @@ public class ModLoader
     {
         try
         {
-            Method onUnloaded = mod.getMethod("onUnloaded");
-            if (onUnloaded != null) { onUnloaded.invoke(mod); }
+            mod.onUnloaded();
 
             loadedMods.remove(mod);
 

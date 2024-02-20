@@ -10,7 +10,7 @@ public abstract class Mod
     protected String name;
     protected String description;
     protected String version;
-    private int id;
+    private final int id;
 
     private static int nextId = 0;
 
@@ -47,6 +47,8 @@ public abstract class Mod
     public void lateUpdate() {}
     public void stop() {}
     public void destroy() {}
+
+    public void setWindow(ModdedWindow window) {}
 
     abstract public void onLoaded();
     abstract public void onUnloaded();
