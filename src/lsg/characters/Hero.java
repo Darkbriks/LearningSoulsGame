@@ -1,13 +1,14 @@
 package lsg.characters;
-import lsg.armor.ArmorItem;
-import lsg.buffs.BuffItem;
-import lsg.buffs.rings.Ring;
 import lsg.utils.Constants;
+import lsg_api.armor.IArmorItem;
+import lsg_api.buffs.IBuffItem;
+import lsg_api.buffs.IRing;
+import lsg_api.characters.IHero;
 
-public class Hero extends Character
+public class Hero extends Character implements IHero
 {
     /////////////// FIELDS ///////////////
-    private final ArmorItem[] armor = new ArmorItem[Constants.HERO_MAX_ARMOR_PIECES];
+    private final IArmorItem[] armor = new IArmorItem[Constants.HERO_MAX_ARMOR_PIECES];
     private int lifeRegen;
     private int stamRegen;
 
@@ -17,13 +18,13 @@ public class Hero extends Character
     public Hero (String name)
     {
         super(name, Constants.INIT_HERO_LIFE, Constants.INIT_HERO_STAMINA);
-        this.buffInventory = new Ring[Constants.HERO_MAX_BUFF_PIECES];
+        this.buffInventory = new IRing[Constants.HERO_MAX_BUFF_PIECES];
         this.lifeRegen = Constants.HERO_LIFE_RECOVER_BASE;
         this.stamRegen = Constants.HERO_STAMINA_RECOVER_BASE;
     }
 
     /////////////// GETTERS ///////////////
-    public ArmorItem[] getArmorItems() { return armor; }
+    public IArmorItem[] getArmorItems() { return armor; }
     public int getLifeRegen() { return lifeRegen; }
     public int getStamRegen() { return stamRegen; }
 
@@ -38,21 +39,21 @@ public class Hero extends Character
     }
 
     @Override
-    public Ring[] getBuffInventory()
+    public IRing[] getBuffInventory()
     {
-        Ring[] rings = new Ring[2];
+        IRing[] rings = new IRing[2];
         for (int i = 0; i < 2; i++)
         {
-            if (buffInventory[i] instanceof Ring) { rings[i] = (Ring) buffInventory[i]; }
+            if (buffInventory[i] instanceof IRing) { rings[i] = (IRing) buffInventory[i]; }
         }
         return rings;
     }
 
     @Override
-    public Ring getBuffItem(int index)
+    public IRing getBuffItem(int index)
     {
         if (index < 0 || index > Constants.HERO_MAX_BUFF_PIECES) { return null; }
-        if (buffInventory[index] instanceof Ring) { return (Ring) buffInventory[index]; }
+        if (buffInventory[index] instanceof IRing) { return (IRing) buffInventory[index]; }
         return null;
     }
 
@@ -70,16 +71,16 @@ public class Hero extends Character
     public void setLifeRegen(int lifeRegen) { this.lifeRegen = lifeRegen; }
     public void setStamRegen(int stamRegen) { this.stamRegen = stamRegen; }
 
-    public void setArmorItem(ArmorItem item, int slot)
+    public void setArmorItem(IArmorItem item, int slot)
     {
         if (slot < 1 || slot > Constants.HERO_MAX_ARMOR_PIECES) { return; }
         armor[slot-1] = item;
     }
 
     @Override
-    public void setBuffItem(BuffItem item, int slot)
+    public void setBuffItem(IBuffItem item, int slot)
     {
-        if (slot < 1 || slot > Constants.HERO_MAX_BUFF_PIECES || !(item instanceof Ring)) { return; }
+        if (slot < 1 || slot > Constants.HERO_MAX_BUFF_PIECES || !(item instanceof IRing)) { return; }
         buffInventory[slot-1] = item;
     }
 
@@ -108,12 +109,12 @@ public class Hero extends Character
     @Override
     public float computeBuff() { return getTotalBuff(); }
 
-    public void equip(ArmorItem item, int slot)
+    public void equip(IArmorItem item, int slot)
     {
         if (slot < 1 || slot > Constants.HERO_MAX_ARMOR_PIECES) { return; }
         if (item != null && bag != null)
         {
-            ArmorItem pulled = (ArmorItem) bag.pop(item);
+            IArmorItem pulled = (IArmorItem) bag.pop(item);
             if (pulled != null)
             {
                 System.out.printf("%s equips %s%n", name, pulled);
@@ -123,12 +124,12 @@ public class Hero extends Character
         }
     }
 
-    public void equip(Ring ring, int slot)
+    public void equip(IRing ring, int slot)
     {
         if (slot < 1 || slot > Constants.HERO_MAX_BUFF_PIECES) { return; }
         if (ring != null && bag != null)
         {
-            Ring pulled = (Ring) bag.pop(ring);
+            IRing pulled = (IRing) bag.pop(ring);
             if (pulled != null)
             {
                 System.out.printf("%s equips %s%n", name, pulled);

@@ -1,6 +1,6 @@
 package lsg.exceptions;
 
-import lsg.bags.Bag;
+import lsg_api.bags.IBag;
 
 /**
  * Classe BagFullException
@@ -11,14 +11,14 @@ public class BagFullException extends Exception
     /**
      * Sac plein (Bag) (private) (final)
      */
-    private final Bag bag;
+    private final IBag bag;
 
     /**
      * Constructeur de l'exception
      * Le message d'erreur est "(nom du sac) is full"
      * @param bag le sac plein
      */
-    public BagFullException(Bag bag)
+    public BagFullException(IBag bag)
     {
         super(bag.getClass().getSimpleName() + " is full");
         this.bag = bag;
@@ -28,5 +28,5 @@ public class BagFullException extends Exception
      * Getter du sac plein
      * @return le sac
      */
-    public Bag getBag() { return bag; }
+    public IBag getBag() { return bag; }
 }

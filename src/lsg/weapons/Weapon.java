@@ -1,10 +1,10 @@
 package lsg.weapons;
 
-import lsg.bags.Collectible;
-import lsg.consumables.repair.RepairKit;
 import lsg.utils.Constants;
+import lsg_api.consumables.IRepairKit;
+import lsg_api.weapon.IWeapon;
 
-public class Weapon implements Collectible
+public class Weapon implements IWeapon
 {
     /////////////// FIELDS ///////////////
     private final String name;
@@ -42,7 +42,7 @@ public class Weapon implements Collectible
 
     public boolean isBroken() { return getDurability() <= 0; }
 
-    public void repairWith(RepairKit kit) { setDurability(getDurability() + kit.use()); }
+    public void repairWith(IRepairKit kit) { setDurability(getDurability() + kit.use()); }
 
     @Override
     public String toString()

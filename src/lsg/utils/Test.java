@@ -2,9 +2,13 @@ package lsg.utils;
 
 import lsg.characters.Hero;
 import lsg.characters.Monster;
+import lsg_api.ConsoleAPI;
 
+@Deprecated
 public class Test
 {
+    static { ConsoleAPI.warn("This class is deprecated and should not be used anymore"); }
+
     public static void launchTest1()
     {
         // Testing Hero and Monster classes
