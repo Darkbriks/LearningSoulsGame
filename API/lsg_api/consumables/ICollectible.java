@@ -1,4 +1,4 @@
-package lsg.bags;
+package lsg_api.consumables;
 
 /**
  * Interface Collectible
@@ -10,7 +10,7 @@ package lsg.bags;
  * @see lsg.consumables.Consumable
  * @see lsg.buffs.BuffItem
  */
-public interface Collectible
+public interface ICollectible
 {
     /**
      * Méthode permettant de récupérer le poids de l'objet

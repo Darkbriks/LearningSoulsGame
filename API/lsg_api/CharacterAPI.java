@@ -3,16 +3,37 @@ package lsg_api;
 import lsg.LearningSoulsGameApplication;
 import lsg.characters.Hero;
 import lsg.characters.Monster;
-import lsg.graphics.widgets.characters.renderers.HeroRenderer;
-import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 
+/**
+ * This class is deprecated and will be removed in a future version.
+ * Please use {@link lsg_api.characters.ICharacter} instead.
+ */
+@Deprecated
 public class CharacterAPI
 {
-    public static Hero getCurrentHero() { return LearningSoulsGameApplication.getInstance().getHero(); }
+    static
+    {
+        ConsoleAPI.warn("CharacterAPI is deprecated and will be removed in a future version. Please use ICharacter instead.");
+    }
+    /**
+     * This method is deprecated and will be removed in a future version.
+     * Please use {@link lsg_api.characters.ICharacter#getCharacter(String)} instead.
+     */
+    @Deprecated
+    public static Hero getCurrentHero()
+    {
+        ConsoleAPI.warn("CharacterAPI.getCurrentHero() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
+        return LearningSoulsGameApplication.getInstance().getHero();
+    }
 
-    public static Monster getCurrentMonster() { return LearningSoulsGameApplication.getInstance().getZombie(); }
-
-    public static HeroRenderer getHeroRenderer() { return LearningSoulsGameApplication.getInstance().getHeroRenderer(); }
-
-    public static ZombieRenderer getZombieRenderer() { return LearningSoulsGameApplication.getInstance().getZombieRenderer(); }
+    /**
+     * This method is deprecated and will be removed in a future version.
+     * Please use {@link lsg_api.characters.ICharacter#getCharacter(String)} instead.
+     */
+    @Deprecated
+    public static Monster getCurrentMonster()
+    {
+        ConsoleAPI.warn("CharacterAPI.getCurrentMonster() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
+        return LearningSoulsGameApplication.getInstance().getZombie();
+    }
 }
