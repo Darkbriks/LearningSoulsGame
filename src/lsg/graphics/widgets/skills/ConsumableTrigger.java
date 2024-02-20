@@ -1,15 +1,15 @@
 package lsg.graphics.widgets.skills;
 
 import javafx.scene.input.KeyCode;
-import lsg.consumables.Consumable;
 import lsg.graphics.CSSFactory;
 import lsg.graphics.CollectibleFactory;
+import lsg_api.consumables.IConsumable;
 
 public class ConsumableTrigger extends SkillTrigger
 {
-    private Consumable consumable;
+    private IConsumable consumable;
 
-    public ConsumableTrigger(KeyCode keyCode, String text, Consumable consumable, SkillAction action)
+    public ConsumableTrigger(KeyCode keyCode, String text, IConsumable consumable, SkillAction action)
     {
         super(keyCode, text, null, action);
 
@@ -23,7 +23,7 @@ public class ConsumableTrigger extends SkillTrigger
      * Permet d'associer un consommable au trigger
      * @param consumable : le consommable
      */
-    public void setConsumable(Consumable consumable)
+    public void setConsumable(IConsumable consumable)
     {
         this.consumable = consumable;
         if (consumable != null)

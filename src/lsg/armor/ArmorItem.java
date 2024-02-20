@@ -1,18 +1,19 @@
 package lsg.armor;
 
-import lsg.bags.Collectible;
+import lsg_api.armor.IArmorItem;
+import lsg_api.consumables.ICollectible;
 
 /**
  * Classe ArmorItem
  * La classe ArmorItem représente un objet d'armure collectible dans le jeu.
  * Un objet d'armure a un nom et une valeur d'armure, et peut être équipé par le héros uniquement.
  * Elle implémente l'interface Collectible.
- * @see lsg.bags.Collectible
+ * @see ICollectible
  * @see lsg.armor.DragonSlayerLeggings
  * @see lsg.armor.RingedKnightArmor
  * @see lsg.armor.BlackWitchVeil
  */
-public class ArmorItem implements Collectible
+public class ArmorItem implements ICollectible, IArmorItem
 {
     /////////////// FIELDS ///////////////
     /**
@@ -55,7 +56,7 @@ public class ArmorItem implements Collectible
     /**
      * Retourne le poids de l'objet d'armure.
      * Méthode de l'interface Collectible.
-     * @see lsg.bags.Collectible
+     * @see ICollectible
      * @return Le poids de l'objet d'armure.
      */
     @Override

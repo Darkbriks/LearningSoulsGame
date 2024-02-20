@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Zombie;
 import lsg.consumables.food.SuperBerry;
@@ -27,15 +26,22 @@ import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
+import lsg_api.ConsoleAPI;
+import lsg_api.characters.ICharacter;
+import lsg_api.characters.IHero;
+import lsg_api.characters.IMonster;
 import user_mods.ModLoader;
 
 public class LearningSoulsGameApplication extends Application
 {
     ////////// SINGLETON //////////
+    @Deprecated
     private static LearningSoulsGameApplication instance = null;
 
+    @Deprecated
     public static LearningSoulsGameApplication getInstance()
     {
+        ConsoleAPI.warn("LearningSoulsGameApplication.getInstance() is deprecated, and will be removed in a future version. This method will not be replaced.");
         return instance;
     }
 
@@ -46,9 +52,9 @@ public class LearningSoulsGameApplication extends Application
     private CreationPane creationPane;
     private String heroName;
     private AnimationPane animationPane;
-    private Hero hero;
+    private IHero hero;
     private HeroRenderer heroRenderer;
-    private Zombie zombie;
+    private IMonster zombie;
     private ZombieRenderer zombieRenderer;
     private HUDPane hudPane;
     private SkillBar skillBar;
@@ -56,13 +62,19 @@ public class LearningSoulsGameApplication extends Application
     private final IntegerProperty score = new SimpleIntegerProperty();
     private ModLoader modLoader;
 
-    ////////// GETTERS FOR API //////////
-    public Hero getHero() { return hero; }
-    public HeroRenderer getHeroRenderer() { return heroRenderer; }
-    public Zombie getZombie() { return zombie; }
-    public ZombieRenderer getZombieRenderer() { return zombieRenderer; }
-    public BooleanProperty getHeroCanPlay() { return heroCanPlay; }
-    public IntegerProperty getScore() { return score; }
+    ////////// GETTERS //////////
+    @Deprecated
+    public Hero getHero()
+    {
+        ConsoleAPI.warn("LearningSoulsGameApplication.getHero() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
+        return (Hero) hero;
+    }
+    @Deprecated
+    public Zombie getZombie()
+    {
+        ConsoleAPI.warn("LearningSoulsGameApplication.getZombie() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
+        return (Zombie) zombie;
+    }
 
     ////////// MAIN //////////
     public static void main(String[] args) { launch(args); }
@@ -218,7 +230,7 @@ public class LearningSoulsGameApplication extends Application
      * @param targetR : la representation de la cible (pour l'animation hurt ou die)
      * @param finishHandler : appele lorsque les calculs et les animations sont terminées
      */
-    private void characterAttack(Character agressor, CharacterRenderer agressorR, Character target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
+    private void characterAttack(ICharacter agressor, CharacterRenderer agressorR, ICharacter target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
     {
         try
         {

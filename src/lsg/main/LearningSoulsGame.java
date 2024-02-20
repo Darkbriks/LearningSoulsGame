@@ -13,12 +13,14 @@ import lsg.consumables.repair.RepairKit;
 import lsg.exceptions.*;
 import lsg.weapons.Claw;
 import lsg.weapons.Sword;
+import lsg_api.ConsoleAPI;
 
 import java.util.Scanner;
 
 /**
  * Class principale du jeu
  */
+@Deprecated
 public class LearningSoulsGame
 {
     /**
@@ -40,6 +42,7 @@ public class LearningSoulsGame
      */
     public static void main(String[] args)
     {
+        ConsoleAPI.warn("LearningSoulsGame is deprecated, use lsg.LearningSoulsGameApplication instead");
         LearningSoulsGame lsg = new LearningSoulsGame();
         lsg.play_v3();
         //lsg.testExceptions();

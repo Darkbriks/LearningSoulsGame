@@ -1,7 +1,8 @@
 package lsg.buffs.rings;
 
 import lsg.buffs.BuffItem;
-import lsg.characters.Hero;
+import lsg_api.buffs.IRing;
+import lsg_api.characters.IHero;
 
 /**
  * Abstract class Ring
@@ -12,7 +13,7 @@ import lsg.characters.Hero;
  * @see lsg.buffs.BuffItem
  * @see lsg.characters.Hero
  */
-public abstract class Ring extends BuffItem
+public abstract class Ring extends BuffItem implements IRing
 {
 	/**
 	 * Le pouvoir de l'anneau (int) (protected)
@@ -22,7 +23,7 @@ public abstract class Ring extends BuffItem
 	/**
 	 * Le héros qui porte l'anneau (Hero) (protected)
 	 */
-	protected Hero hero ;
+	protected IHero hero ;
 
 	/**
 	 * Constructeur de Ring
@@ -39,11 +40,11 @@ public abstract class Ring extends BuffItem
 	  * Getter qui retourne le héros portant l'anneau
 	  * @return le héros portant l'anneau (Hero)
 	  */
-	public Hero getHero() { return hero; }
+	public IHero getIHero() { return hero; }
 
 	/**
 	 * Setter qui définit le héros portant l'anneau
 	 * @param hero le héros portant l'anneau (Hero)
 	 */
-	public void setHero(Hero hero) { this.hero = hero; }
+	public void setIHero(IHero hero) { this.hero = hero; }
 }
