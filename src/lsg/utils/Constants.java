@@ -37,7 +37,7 @@ public class Constants
     /////////////// GAME DISPLAY ///////////////
     public static final String GAME_TITLE = "Learning Souls Game";
     public static final String GAME_VERSION = "0.3.0.dev";
-    public static final String API_VERSION = "0.2.0.dev";
+    public static final String API_VERSION = "0.2.2.dev";
     public static final String GAME_CSS = "LSG.css";
     public static final int GAME_WIDTH = 1200;
     public static final int GAME_HEIGHT = 800;

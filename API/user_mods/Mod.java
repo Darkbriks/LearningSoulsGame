@@ -42,11 +42,26 @@ public abstract class Mod
 
     public void awake() {}
     public void start() {}
-    public void earlyUpdate() {}
-    public void update() {}
-    public void lateUpdate() {}
+    public void beginTurn() {}
+    public void endTurn() { info("EndTurn"); } // TODO : Called
     public void stop() {}
-    public void destroy() {}
+
+    public void heroBeginAttack() {}
+    public void heroFinishAttack() {}
+    public void heroBeginRecuperate() {}
+    public void heroFinishRecuperate() {}
+    public void heroBeginConsume() {}
+    public void heroFinishConsume() {}
+    public void heroBeginTurn() { info("heroBeginTurn"); } // TODO : Called
+    public void heroFinishTurn() { info("heroFinishTurn"); } // TODO : Called
+    public void heroDie() {}
+
+    public void monsterBeginAttack() { info("monsterBeginAttack"); }
+    public void monsterFinishAttack() { info("monsterFinishAttack"); }
+    public void monsterBeginTurn() { info("monsterBeginTurn"); }
+    public void monsterEndTurn() { info("monsterEndTurn"); }
+    public void MonsterDie() { info("MonsterDie"); }
+    public void newMonsterCreate() { info("NewMonsterCreate"); }
 
     public void setWindow(ModdedWindow window) {}
 

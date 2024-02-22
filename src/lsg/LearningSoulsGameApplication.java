@@ -94,8 +94,8 @@ public class LearningSoulsGameApplication extends Application
         stage.setScene(scene);
         stage.resizableProperty().setValue(Boolean.FALSE);
 
-        // Ajouter une action pour fermer l'application
         stage.setOnCloseRequest(event -> {
+            modLoader.invoke("stop");
             modLoader.unloadMods();
             System.exit(0);
         });
@@ -105,6 +105,9 @@ public class LearningSoulsGameApplication extends Application
         stage.show();
 
         modLoader.invoke("awake");
+        heroCanPlay.addListener((observable, oldValue, newValue) -> {
+            if (newValue) { modLoader.invoke("beginTurn"); }
+        });
 
         startGame();
     }
@@ -254,40 +257,75 @@ public class LearningSoulsGameApplication extends Application
 
     private void heroAttack()
     {
+        modLoader.invoke("heroBeginAttack");
         heroCanPlay.setValue(false);
-        characterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> finishTurn());
+        characterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> {
+            modLoader.invoke("heroFinishAttack");
+            finishTurn();
+        });
     }
 
     private void heroRecuperate()
     {
+        modLoader.invoke("heroBeginRecuperate");
         heroCanPlay.setValue(false);
         hero.recuperate();
-        hudPane.getMessagePane().showMessage("You recuperate life and stamina", 1, event -> finishTurn());
+        hudPane.getMessagePane().showMessage("You recuperate life and stamina", 1, event -> {
+            modLoader.invoke("heroFinishRecuperate");
+            finishTurn();
+        });
     }
 
     private void heroConsume()
     {
+        modLoader.invoke("heroBeginConsume");
         heroCanPlay.setValue(false);
         try {
             int life = hero.getLife();
             hero.use(hero.getConsumable());
             System.out.println(hero.getName() + " consumes a " + hero.getConsumable().getName() + " -> +" + (hero.getLife() - life) + " Life");
-            hudPane.getMessagePane().showMessage("You consume a " + hero.getConsumable().getName() + "\n\t\t + " + (hero.getLife() - life) + " Life", 1, event -> finishTurn());
+            hudPane.getMessagePane().showMessage("You consume a " + hero.getConsumable().getName() + "\n\t\t + " + (hero.getLife() - life) + " Life", 1, event -> {
+                modLoader.invoke("heroFinishConsume");
+                finishTurn();
+            });
         } catch (Exception e) {
-            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> finishTurn());
+            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> {
+                modLoader.invoke("heroFinishConsume");
+                finishTurn();
+            });
         }
     }
 
-    private void monsterAttack()
+    private void monsterTurn(int action)
     {
+        modLoader.invoke("monsterBeginTurn");
+        switch (action)
+        {
+            case 0: monsterAttack( event -> modLoader.invoke("monsterEndTurn")); break;
+            // TODO : Add other monster actions
+            default: ConsoleAPI.error("[LearningSoulsGameApplication][monsterTurn] : invalid action");
+        }
+    }
+
+    private void monsterAttack(EventHandler<ActionEvent> finishHandler)
+    {
+        modLoader.invoke("monsterBeginAttack");
+
         characterAttack(zombie, zombieRenderer, hero, heroRenderer, event -> {
+
+            modLoader.invoke("monsterFinishAttack");
+            finishHandler.handle(null);
             if (hero.isAlive()) { heroCanPlay.setValue(true); }
-            else { gameOver(); }
+            else {
+                modLoader.invoke("heroDie");
+                gameOver();
+            }
         });
     }
 
     private void gameOver()
     {
+        ModLoader.getInstance().invoke("stop");
         hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
         hudPane.getChildren().clear();
         animationPane.getChildren().clear();
@@ -300,12 +338,16 @@ public class LearningSoulsGameApplication extends Application
 
     private void finishTurn()
     {
-        if (zombie.isAlive()) { monsterAttack(); }
+        if (zombie.isAlive()) { monsterTurn(0); }
         else
         {
+            modLoader.invoke("MonsterDie");
             animationPane.getChildren().remove(zombieRenderer);
             score.setValue(score.getValue() + 1);
-            createMonster(event -> monsterAttack());
+            createMonster(event -> {
+                modLoader.invoke("newMonsterCreate");
+                monsterTurn(0);
+            });
         }
     }
 }
