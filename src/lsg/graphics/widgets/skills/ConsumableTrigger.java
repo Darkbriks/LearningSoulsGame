@@ -11,7 +11,7 @@ public class ConsumableTrigger extends SkillTrigger
 
     public ConsumableTrigger(KeyCode keyCode, String text, IConsumable consumable, SkillAction action)
     {
-        super(keyCode, text, null, action);
+        super(keyCode, text, null, null, action);
 
         this.getStylesheets().add(CSSFactory.getStyleSheet("ConsumableTrigger.css"));
         this.getStyleClass().add("consumable");

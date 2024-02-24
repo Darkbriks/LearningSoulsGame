@@ -40,7 +40,7 @@ public class SkillBar extends HBox
         int i = 0;
         for (KeyCode keyCode : DEFAULT_BINDING.keySet())
         {
-            triggers[i] = new SkillTrigger(keyCode, DEFAULT_BINDING.get(keyCode), null, null);
+            triggers[i] = new SkillTrigger(keyCode, DEFAULT_BINDING.get(keyCode), null, null, null);
             this.getChildren().add(triggers[i]);
             i++;
         }

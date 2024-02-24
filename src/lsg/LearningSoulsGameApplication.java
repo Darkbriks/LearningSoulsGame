@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -24,6 +26,7 @@ import lsg.graphics.widgets.characters.renderers.CharacterRenderer;
 import lsg.graphics.widgets.characters.renderers.HeroRenderer;
 import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
+import lsg.texts.TooltipTexts;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
 import lsg_api.ConsoleAPI;
@@ -146,12 +149,15 @@ public class LearningSoulsGameApplication extends Application
 
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(this::heroAttack);
+        skillBar.getTrigger(0).setTooltip(new Tooltip(TooltipTexts.attackTooltip(hero.getWeapon())));
 
         skillBar.getTrigger(1).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.RECUPERATE_SKILL)[0]);
         skillBar.getTrigger(1).setAction(this::heroRecuperate);
+        skillBar.getTrigger(1).setTooltip(new Tooltip(TooltipTexts.recuperateTooltip(hero.getLifeRegen(), hero.getStamRegen())));
 
         skillBar.getConsumableTrigger().setConsumable(hero.getConsumable());
         skillBar.getConsumableTrigger().setAction(this::heroConsume);
+        skillBar.getConsumableTrigger().setTooltip(new Tooltip(TooltipTexts.consumeTooltip(hero.getConsumable())));
 
         scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
     }
