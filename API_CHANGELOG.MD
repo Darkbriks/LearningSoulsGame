@@ -7,6 +7,10 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Removed
+
+- Messages de debug oubliés dans les méthodes de la classe `Mod`
+
 ## [0.2.2] - 2024-02-22
 
 ### Added

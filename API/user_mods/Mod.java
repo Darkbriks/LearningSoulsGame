@@ -56,12 +56,12 @@ public abstract class Mod
     public void heroFinishTurn() { info("heroFinishTurn"); } // TODO : Called
     public void heroDie() {}
 
-    public void monsterBeginAttack() { info("monsterBeginAttack"); }
-    public void monsterFinishAttack() { info("monsterFinishAttack"); }
-    public void monsterBeginTurn() { info("monsterBeginTurn"); }
-    public void monsterEndTurn() { info("monsterEndTurn"); }
-    public void MonsterDie() { info("MonsterDie"); }
-    public void newMonsterCreate() { info("NewMonsterCreate"); }
+    public void monsterBeginAttack() {}
+    public void monsterFinishAttack() {}
+    public void monsterBeginTurn() {}
+    public void monsterEndTurn() {}
+    public void MonsterDie() {}
+    public void newMonsterCreate() {}
 
     public void setWindow(ModdedWindow window) {}
 
