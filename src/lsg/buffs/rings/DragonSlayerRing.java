@@ -1,7 +1,7 @@
 package lsg.buffs.rings;
 
-import lsg.armor.ArmorItem;
 import lsg.armor.DragonSlayerLeggings;
+import lsg_api.armor.IArmorItem;
 
 /**
  * Class DragonSlayerRing
@@ -37,8 +37,8 @@ public class DragonSlayerRing extends Ring
 	 */
 	private boolean hasDragonsSlayerItem()
 	{
-		ArmorItem[] items = hero.getArmorItems() ;
-		for(ArmorItem item: items)
+		IArmorItem[] items = hero.getArmorItems() ;
+		for(IArmorItem item: items)
 		{
 			if(item instanceof DragonSlayerLeggings) return true ; 
 		}

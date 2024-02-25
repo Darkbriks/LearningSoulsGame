@@ -8,10 +8,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Zombie;
 import lsg.consumables.food.SuperBerry;
@@ -25,39 +26,92 @@ import lsg.graphics.widgets.characters.renderers.CharacterRenderer;
 import lsg.graphics.widgets.characters.renderers.HeroRenderer;
 import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
+import lsg.texts.TooltipTexts;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
+import lsg_api.ConsoleAPI;
+import lsg_api.characters.ICharacter;
+import lsg_api.characters.IHero;
+import lsg_api.characters.IMonster;
+import user_mods.ModLoader;
 
 public class LearningSoulsGameApplication extends Application
 {
+    ////////// SINGLETON //////////
+    @Deprecated
+    private static LearningSoulsGameApplication instance = null;
+
+    @Deprecated
+    public static LearningSoulsGameApplication getInstance()
+    {
+        ConsoleAPI.warn("LearningSoulsGameApplication.getInstance() is deprecated, and will be removed in a future version. This method will not be replaced.");
+        return instance;
+    }
+
+    ////////// ATTRIBUTES //////////
     private Scene scene;
     private AnchorPane root;
     private TitlePane gameTitle;
     private CreationPane creationPane;
     private String heroName;
     private AnimationPane animationPane;
-    private Hero hero;
+    private IHero hero;
     private HeroRenderer heroRenderer;
-    private Zombie zombie;
+    private IMonster zombie;
     private ZombieRenderer zombieRenderer;
     private HUDPane hudPane;
     private SkillBar skillBar;
     private final BooleanProperty heroCanPlay = new SimpleBooleanProperty(false);
     private final IntegerProperty score = new SimpleIntegerProperty();
+    private ModLoader modLoader;
 
+    ////////// GETTERS //////////
+    @Deprecated
+    public Hero getHero()
+    {
+        ConsoleAPI.warn("LearningSoulsGameApplication.getHero() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
+        return (Hero) hero;
+    }
+    @Deprecated
+    public Zombie getZombie()
+    {
+        ConsoleAPI.warn("LearningSoulsGameApplication.getZombie() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
+        return (Zombie) zombie;
+    }
+
+    ////////// MAIN //////////
     public static void main(String[] args) { launch(args); }
 
+    ////////// METHODS //////////
     @Override
     public void start(Stage stage)
     {
+        instance = this;
+
+        modLoader = ModLoader.getInstance();
+        modLoader.loadMods();
+
         stage.setTitle(Constants.GAME_TITLE);
         root = new AnchorPane();
         scene = new Scene(root, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         stage.setScene(scene);
         stage.resizableProperty().setValue(Boolean.FALSE);
+
+        stage.setOnCloseRequest(event -> {
+            modLoader.invoke("stop");
+            modLoader.unloadMods();
+            System.exit(0);
+        });
+
         buildUI();
         addListeners();
         stage.show();
+
+        modLoader.invoke("awake");
+        heroCanPlay.addListener((observable, oldValue, newValue) -> {
+            if (newValue) { modLoader.invoke("beginTurn"); }
+        });
+
         startGame();
     }
 
@@ -95,12 +149,15 @@ public class LearningSoulsGameApplication extends Application
 
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(this::heroAttack);
+        skillBar.getTrigger(0).setTooltip(new Tooltip(TooltipTexts.attackTooltip(hero.getWeapon())));
 
         skillBar.getTrigger(1).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.RECUPERATE_SKILL)[0]);
         skillBar.getTrigger(1).setAction(this::heroRecuperate);
+        skillBar.getTrigger(1).setTooltip(new Tooltip(TooltipTexts.recuperateTooltip(hero.getLifeRegen(), hero.getStamRegen())));
 
         skillBar.getConsumableTrigger().setConsumable(hero.getConsumable());
         skillBar.getConsumableTrigger().setAction(this::heroConsume);
+        skillBar.getConsumableTrigger().setTooltip(new Tooltip(TooltipTexts.consumeTooltip(hero.getConsumable())));
 
         scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
     }
@@ -165,7 +222,10 @@ public class LearningSoulsGameApplication extends Application
         root.getChildren().add(hudPane);
         createHero();
         createSkills();
-        createMonster(event -> hudPane.getMessagePane().showMessage("Fight !", 4, event1 -> heroCanPlay.setValue(true)));
+        createMonster(event -> {
+                    ModLoader.getInstance().invoke("start");
+                    hudPane.getMessagePane().showMessage("Fight !", 4, event1 -> heroCanPlay.setValue(true));
+                });
         hudPane.scoreProperty().bind(score);
     }
 
@@ -179,7 +239,7 @@ public class LearningSoulsGameApplication extends Application
      * @param targetR : la representation de la cible (pour l'animation hurt ou die)
      * @param finishHandler : appele lorsque les calculs et les animations sont terminées
      */
-    private void characterAttack(Character agressor, CharacterRenderer agressorR, Character target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
+    private void characterAttack(ICharacter agressor, CharacterRenderer agressorR, ICharacter target, CharacterRenderer targetR, EventHandler<ActionEvent> finishHandler)
     {
         try
         {
@@ -203,53 +263,97 @@ public class LearningSoulsGameApplication extends Application
 
     private void heroAttack()
     {
+        modLoader.invoke("heroBeginAttack");
         heroCanPlay.setValue(false);
-        characterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> finishTurn());
+        characterAttack(hero, heroRenderer, zombie, zombieRenderer, event -> {
+            modLoader.invoke("heroFinishAttack");
+            finishTurn();
+        });
     }
 
     private void heroRecuperate()
     {
+        modLoader.invoke("heroBeginRecuperate");
         heroCanPlay.setValue(false);
         hero.recuperate();
-        hudPane.getMessagePane().showMessage("You recuperate life and stamina", 1, event -> finishTurn());
+        hudPane.getMessagePane().showMessage("You recuperate life and stamina", 1, event -> {
+            modLoader.invoke("heroFinishRecuperate");
+            finishTurn();
+        });
     }
 
     private void heroConsume()
     {
+        modLoader.invoke("heroBeginConsume");
         heroCanPlay.setValue(false);
         try {
             int life = hero.getLife();
             hero.use(hero.getConsumable());
             System.out.println(hero.getName() + " consumes a " + hero.getConsumable().getName() + " -> +" + (hero.getLife() - life) + " Life");
-            hudPane.getMessagePane().showMessage("You consume a " + hero.getConsumable().getName() + "\n\t\t + " + (hero.getLife() - life) + " Life", 1, event -> finishTurn());
+            hudPane.getMessagePane().showMessage("You consume a " + hero.getConsumable().getName() + "\n\t\t + " + (hero.getLife() - life) + " Life", 1, event -> {
+                modLoader.invoke("heroFinishConsume");
+                finishTurn();
+            });
         } catch (Exception e) {
-            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> finishTurn());
+            hudPane.getMessagePane().showMessage(e.getMessage(), 1, event -> {
+                modLoader.invoke("heroFinishConsume");
+                finishTurn();
+            });
         }
     }
 
-    private void monsterAttack()
+    private void monsterTurn(int action)
     {
+        modLoader.invoke("monsterBeginTurn");
+        switch (action)
+        {
+            case 0: monsterAttack( event -> modLoader.invoke("monsterEndTurn")); break;
+            // TODO : Add other monster actions
+            default: ConsoleAPI.error("[LearningSoulsGameApplication][monsterTurn] : invalid action");
+        }
+    }
+
+    private void monsterAttack(EventHandler<ActionEvent> finishHandler)
+    {
+        modLoader.invoke("monsterBeginAttack");
+
         characterAttack(zombie, zombieRenderer, hero, heroRenderer, event -> {
+
+            modLoader.invoke("monsterFinishAttack");
+            finishHandler.handle(null);
             if (hero.isAlive()) { heroCanPlay.setValue(true); }
-            else { gameOver(); }
+            else {
+                modLoader.invoke("heroDie");
+                gameOver();
+            }
         });
     }
 
-    private void gameOver() { hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
-        hudPane = null;
-        animationPane = null;
-        gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> System.exit(0)));
+    private void gameOver()
+    {
+        ModLoader.getInstance().invoke("stop");
+        hudPane.getMessagePane().showMessage("YOU DIED", 2, event -> {
+        hudPane.getChildren().clear();
+        animationPane.getChildren().clear();
+        gameTitle.zoomIn(event1 -> gameTitle.fadeOut(event2 -> {
+            modLoader.unloadMods();
+            System.exit(0);
+        }));
     });
     }
 
     private void finishTurn()
     {
-        if (zombie.isAlive()) { monsterAttack(); }
+        if (zombie.isAlive()) { monsterTurn(0); }
         else
         {
+            modLoader.invoke("MonsterDie");
             animationPane.getChildren().remove(zombieRenderer);
             score.setValue(score.getValue() + 1);
-            createMonster(event -> monsterAttack());
+            createMonster(event -> {
+                modLoader.invoke("newMonsterCreate");
+                monsterTurn(0);
+            });
         }
     }
 }

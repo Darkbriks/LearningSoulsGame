@@ -1,14 +1,16 @@
 package lsg.buffs.talismans;
 
-import java.util.Calendar;
-
 import lsg.buffs.BuffItem;
+import lsg_api.buffs.ITalismans;
+
+import java.util.Calendar;
 
 /**
  * Classe abstraite pour les talismans.
  * Un talisman est un buff qui s'active entre deux heures de la journée.
  */
-public class Talisman extends BuffItem {
+public class Talisman extends BuffItem implements ITalismans
+{
 	
 	private final float buff ;
 	private final int start;

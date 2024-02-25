@@ -1,6 +1,8 @@
 package lsg.buffs;
 
-import lsg.bags.Collectible;
+import lsg_api.buffs.IBuffItem;
+import lsg_api.consumables.ICollectible;
+
 import java.util.Locale;
 
 /**
@@ -12,9 +14,9 @@ import java.util.Locale;
  * Les objets de cette classe ont un poids de 1 par défaut
  * @see lsg.buffs.rings.Ring
  * @see lsg.buffs.talismans.Talisman
- * @see lsg.bags.Collectible
+ * @see ICollectible
  */
-public abstract class BuffItem implements Collectible
+public abstract class BuffItem implements IBuffItem
 {
 	/**
 	 * Le nom du buff (String) (final) (private)
@@ -42,7 +44,7 @@ public abstract class BuffItem implements Collectible
 	/**
 	 * Getter pour le poids du buff
 	 * Méthode de l'interface Collectible
-	 * @see lsg.bags.Collectible
+	 * @see ICollectible
 	 * @return le poids du buff (int)
 	 */
 	@Override

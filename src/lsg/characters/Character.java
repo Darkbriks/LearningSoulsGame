@@ -1,35 +1,30 @@
 package lsg.characters;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import lsg.bags.Bag;
-import lsg.bags.Collectible;
 import lsg.bags.SmallBag;
-import lsg.buffs.BuffItem;
-import lsg.consumables.Consumable;
-import lsg.consumables.drinks.Drink;
-import lsg.consumables.food.Food;
-import lsg.consumables.repair.RepairKit;
 import lsg.exceptions.*;
 import lsg.helpers.Dice;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
-import lsg.weapons.Weapon;
+import lsg_api.bags.IBag;
+import lsg_api.buffs.IBuffItem;
+import lsg_api.characters.ICharacter;
+import lsg_api.consumables.*;
+import lsg_api.weapon.IWeapon;
 
 import java.util.Locale;
 
-import static lsg.bags.Bag.transfer;
-
-public abstract class Character
+public abstract class Character implements ICharacter
 {
     /////////////// FIELDS ///////////////
     protected String name;
     protected int maxLife, maxStamina, life, stamina;
     protected SimpleDoubleProperty lifeRateProperty, staminaRateProperty;
     protected Dice dice;
-    protected Weapon weapon;
-    protected BuffItem[] buffInventory;
-    protected Consumable consumable;
-    protected Bag bag;
+    protected IWeapon weapon;
+    protected IBuffItem[] buffInventory;
+    protected IConsumable consumable;
+    protected IBag bag;
 
     /////////////// CONSTRUCTORS ///////////////
     public Character(String name, int maxLife, int maxStamina)
@@ -44,6 +39,8 @@ public abstract class Character
         this.dice = new Dice(101);
         this.weapon = new Sword();
         this.bag = new SmallBag();
+
+        ICharacter.addCharacter(this);
     }
 
     /////////////// GETTERS ///////////////
@@ -54,19 +51,19 @@ public abstract class Character
     public int getStamina() { return stamina; }
     public SimpleDoubleProperty lifeRateProperty() { return lifeRateProperty; }
     public SimpleDoubleProperty staminaRateProperty() { return staminaRateProperty; }
-    public Weapon getWeapon() { return weapon; }
-    public abstract BuffItem[] getBuffInventory();
-    public abstract BuffItem getBuffItem(int index);
-    public Consumable getConsumable() { return consumable; }
+    public IWeapon getWeapon() { return weapon; }
+    public abstract IBuffItem[] getBuffInventory();
+    public abstract IBuffItem getBuffItem(int index);
+    public IConsumable getConsumable() { return consumable; }
     public int getBagCapacity() throws NoBagException
     { if (bag == null) { throw new NoBagException(); } return bag.getCapacity(); }
 
     public int getBagWeight() throws NoBagException
     { if (bag == null) { throw new NoBagException(); } return bag.getWeight(); }
-    public Collectible[] getBagItems() throws NoBagException
+    public ICollectible[] getBagItems() throws NoBagException
     { if (bag == null) { throw new NoBagException(); } return bag.getItems(); }
 
-    public Bag getBag() throws NoBagException
+    public IBag getBag() throws NoBagException
     { if (bag == null) { throw new NoBagException(); } return bag; }
 
     /////////////// SETTERS ///////////////
@@ -110,15 +107,15 @@ public abstract class Character
         return overflow;
     }
 
-    public void setWeapon(Weapon weapon) { this.weapon = weapon; }
-    public abstract void setBuffItem(BuffItem item, int slot);
-    public void setConsumable(Consumable consumable) { this.consumable = consumable; }
-    public Bag setBag(Bag bag)
+    public void setWeapon(IWeapon weapon) { this.weapon = weapon; }
+    public abstract void setBuffItem(IBuffItem item, int slot);
+    public void setConsumable(IConsumable consumable) { this.consumable = consumable; }
+    public IBag setBag(IBag bag)
     {
         if (bag == null) { System.out.printf("null bag can't be set to %s%n", name); return null; }
-        Bag oldBag = this.bag;
+        IBag oldBag = this.bag;
         this.bag = bag;
-        transfer(oldBag, this.bag);
+        IBag.transfer(oldBag, this.bag);
         System.out.printf("%s changes %s for %s%n", name, oldBag.getClass().getSimpleName(), this.bag.getClass().getSimpleName());
         return oldBag;
     }
@@ -131,7 +128,7 @@ public abstract class Character
      * @throws WeaponBrokenException if weapon is broken
      * @throws StaminaEmptyException if stamina is empty
      */
-    private int attackWith(Weapon weapon) throws
+    private int attackWith(IWeapon weapon) throws
             WeaponNullException,
             WeaponBrokenException,
             StaminaEmptyException
@@ -153,7 +150,7 @@ public abstract class Character
         return (int) Math.round(damage);
     }
 
-    private void drink(Drink drink) throws ConsumeNullException, ConsumeEmptyException
+    private void drink(IDrink drink) throws ConsumeNullException, ConsumeEmptyException
     {
         if (drink == null) { throw new ConsumeNullException(); }
         if (isAlive())
@@ -163,7 +160,7 @@ public abstract class Character
         }
     }
 
-    private void eat(Food food) throws ConsumeNullException, ConsumeEmptyException
+    private void eat(IFood food) throws ConsumeNullException, ConsumeEmptyException
     {
         if (food == null) { throw new ConsumeNullException(); }
         if (isAlive())
@@ -173,7 +170,7 @@ public abstract class Character
         }
     }
 
-    private void repairWeaponWith(Consumable consumable) throws ConsumeNullException, ConsumeRepairNullWeaponException
+    private void repairWeaponWith(IConsumable consumable) throws ConsumeNullException, ConsumeRepairNullWeaponException
     {
         if (weapon == null) { throw new ConsumeRepairNullWeaponException(); }
         if (consumable == null) { throw new ConsumeNullException(); }
@@ -187,16 +184,16 @@ public abstract class Character
     private double lerp(double v1, double v2, double t) { return (v1 + (v2 - v1) * t); }
     private double lerp(double v2, double t) { return (v2 * t); }
 
-    private <T extends Consumable> Consumable fastUseFirst(Class<T> type)
+    private <T extends IConsumable> IConsumable fastUseFirst(Class<T> type)
             throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
     {
         if (bag != null)
         {
-            Consumable consumable = null;
+            IConsumable consumable = null;
             System.out.printf("%s looks for %s in his bag%n", name, type.getSimpleName());
-            Collectible[] items = bag.getItems();
+            ICollectible[] items = bag.getItems();
 
-            for (Collectible item : items) { if (type.isInstance(item)) { consumable = (Consumable) item; break; } }
+            for (ICollectible item : items) { if (type.isInstance(item)) { consumable = (IConsumable) item; break; } }
 
             if (consumable == null) { throw new ConsumeNullException(); }
 
@@ -230,13 +227,13 @@ public abstract class Character
         return minor;
     }
 
-    public void use(Consumable consumable)
+    public void use(IConsumable consumable)
             throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException
     {
         if (consumable == null) { throw new ConsumeNullException(); }
-        if (consumable instanceof Drink) { drink((Drink) consumable); }
-        else if (consumable instanceof Food) { eat((Food) consumable); }
-        else if (consumable instanceof RepairKit)
+        if (consumable instanceof IDrink) { drink((IDrink) consumable); }
+        else if (consumable instanceof IFood) { eat((IFood) consumable); }
+        else if (consumable instanceof IRepairKit)
         {
             if (weapon == null) { throw new ConsumeRepairNullWeaponException(); }
             repairWeaponWith(consumable);
@@ -250,7 +247,7 @@ public abstract class Character
         consumable = null;
     }
 
-    public void pickUp(Collectible item) throws NoBagException, BagFullException
+    public void pickUp(ICollectible item) throws NoBagException, BagFullException
     {
         if (bag == null) { throw new NoBagException(); }
         if (item != null)
@@ -261,12 +258,12 @@ public abstract class Character
         }
     }
 
-    public Collectible pullOut(Collectible item) throws NoBagException
+    public ICollectible pullOut(ICollectible item) throws NoBagException
     {
         if (bag == null) { throw new NoBagException(); }
         if (item != null)
         {
-            Collectible pulled = bag.pop(item);
+            ICollectible pulled = bag.pop(item);
             if (pulled != null) { System.out.printf("%s pulls out %s%n", name, pulled.toString()); }
             else { System.out.printf("%s can't pull out %s%n", name, item.toString()); }
             return pulled;
@@ -276,15 +273,15 @@ public abstract class Character
 
     public void printBag() { if (bag != null) { System.out.println(bag); } }
 
-    public void equip(Weapon weapon) throws NoBagException, BagFullException
+    public void equip(IWeapon weapon) throws NoBagException, BagFullException
     {
         if (bag == null) { throw new NoBagException(); }
         if (weapon != null)
         {
             if (bag.contains(weapon))
             {
-                Weapon oldWeapon = this.weapon;
-                this.weapon = (Weapon) pullOut(weapon);
+                IWeapon oldWeapon = this.weapon;
+                this.weapon = (IWeapon) pullOut(weapon);
                 if (oldWeapon != null) { pickUp(oldWeapon); }
                 System.out.printf("%s equips %s%n", name, weapon);
             }
@@ -292,15 +289,15 @@ public abstract class Character
         }
     }
 
-    public void equip(Consumable consumable) throws NoBagException, BagFullException
+    public void equip(IConsumable consumable) throws NoBagException, BagFullException
     {
         if (bag == null) { throw new NoBagException(); }
         if (consumable != null)
         {
             if (bag.contains(consumable))
             {
-                Consumable oldConsumable = this.consumable;
-                this.consumable = (Consumable) pullOut(consumable);
+                IConsumable oldConsumable = this.consumable;
+                this.consumable = (IConsumable) pullOut(consumable);
                 if (oldConsumable != null) { pickUp(oldConsumable); }
                 System.out.printf("%s equips %s%n", name, consumable);
             }
@@ -308,12 +305,12 @@ public abstract class Character
         }
     }
 
-    public Drink fastDrink() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
-    { return (Drink) fastUseFirst(Drink.class); }
-    public Food fastEat() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
-    { return (Food) fastUseFirst(Food.class); }
-    public RepairKit fastRepair() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
-    { return (RepairKit) fastUseFirst(RepairKit.class); }
+    public IDrink fastDrink() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
+    { return (IDrink) fastUseFirst(IDrink.class); }
+    public IFood fastEat() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
+    { return (IFood) fastUseFirst(IFood.class); }
+    public IRepairKit fastRepair() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException, NoBagException
+    { return (IRepairKit) fastUseFirst(IRepairKit.class); }
 
     public abstract void printStats();
 

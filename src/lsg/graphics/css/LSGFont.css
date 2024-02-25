@@ -7,7 +7,7 @@
 .game-font
 {
     -fx-font-family: 'Arkham';
-    /*-fx-font-style: 'reg';*/
+    /*-fx-font-style: reg;*/
     -fx-font-size: 45px;
 }
 

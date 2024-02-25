@@ -2,6 +2,7 @@ package lsg.graphics.widgets.skills;
 
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,14 +15,16 @@ public class SkillTrigger extends AnchorPane
 {
     private final ImageView view;
     private Label text;
+    private Tooltip tooltip;
     private KeyCode keyCode;
     private SkillAction action = null;
     private final ColorAdjust desaturate;
 
-    public SkillTrigger(KeyCode keyCode, String text, Image image, SkillAction action)
+    public SkillTrigger(KeyCode keyCode, String text, String tooltip, Image image, SkillAction action)
     {
         this.view = new ImageView(image);
         this.text = new Label(text);
+        this.tooltip = new Tooltip(tooltip);
         this.keyCode = keyCode;
         this.action = action;
         this.desaturate = new ColorAdjust();
@@ -34,11 +37,18 @@ public class SkillTrigger extends AnchorPane
 
     public Image getImage() { return this.view.getImage(); }
     public Label getText() { return this.text; }
+    public Tooltip getTooltip() { return this.tooltip; }
     public KeyCode getKeyCode() { return this.keyCode; }
     public SkillAction getAction() { return this.action; }
 
     public void setImage(Image image) { this.view.setImage(image); }
     public void setText(Label text) { this.text = text; }
+    public void setTooltip(Tooltip tooltip)
+    {
+        Tooltip.uninstall(this, tooltip);
+        this.tooltip = tooltip;
+        Tooltip.install(this, tooltip);
+    }
     public void setKeyCode(KeyCode keyCode) { this.keyCode = keyCode; }
     public void setAction(SkillAction action) { this.action = action; }
 
@@ -52,6 +62,7 @@ public class SkillTrigger extends AnchorPane
 
         this.getChildren().add(view);
         this.getChildren().add(text);
+        Tooltip.install(this, tooltip);
 
         this.setPrefSize(50, 50);
         this.setMinSize(50, 50);
@@ -61,13 +72,15 @@ public class SkillTrigger extends AnchorPane
         this.text.setMaxSize(50, 50);
         this.text.setPrefSize(50, 50);
         this.text.setStyle("-fx-alignment: center;");
+
+        tooltip.setWrapText(true);
     }
 
     public void trigger()
     {
         if (disabledProperty().get()) { return; }
         animate();
-        action.execute();
+        if (action != null) { action.execute(); }
     }
 
     private void addListeners()

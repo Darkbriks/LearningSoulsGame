@@ -2,6 +2,9 @@ package lsg.bags;
 
 import lsg.exceptions.BagFullException;
 import lsg.utils.Constants;
+import lsg_api.bags.IBag;
+import lsg_api.consumables.ICollectible;
+
 import java.util.HashSet;
 
 /**
@@ -12,9 +15,9 @@ import java.util.HashSet;
  * Un sac peut contenir des objets de type Collectible
  * @see lsg.bags.SmallBag
  * @see lsg.bags.MediumBag
- * @see lsg.bags.Collectible
+ * @see ICollectible
  */
-public class Bag
+public class Bag implements IBag
 {
     /////////////// FIELDS ///////////////
     /**
@@ -28,7 +31,7 @@ public class Bag
     /**
      * Liste des objets actuellement dans le sac (HashSet<Collectible>) (private)
      */
-    private final HashSet<Collectible> items;
+    private final HashSet<ICollectible> items;
 
     /////////////// CONSTRUCTEUR ///////////////
     /**
@@ -57,7 +60,7 @@ public class Bag
      * Getter de la liste des objets actuellement dans le sac
      * @return la liste des objets actuellement dans le sac
      */
-    public Collectible[] getItems() { return items.toArray(new Collectible[0]); }
+    public ICollectible[] getItems() { return items.toArray(new ICollectible[0]); }
 
     /////////////// METHODS ///////////////
     /**
@@ -65,7 +68,8 @@ public class Bag
      * Si le poids de l'objet à ajouter est supérieur à la capacité restante du sac, l'objet n'est pas ajouté
      * @param item (Collectible) : objet à ajouter au sac
      */
-    public void push(Collectible item) throws BagFullException
+
+    public void push(ICollectible item) throws BagFullException
     {
         if (weight + item.getWeight() > capacity) { throw new BagFullException(this); }
 
@@ -78,7 +82,7 @@ public class Bag
      * @param item (Collectible) : objet à retirer du sac
      * @return l'objet retiré du sac
      */
-    public Collectible pop(Collectible item)
+    public ICollectible pop(ICollectible item)
     {
         if (items.contains(item))
         {
@@ -94,7 +98,7 @@ public class Bag
      * @param item (Collectible) : objet à rechercher dans le sac
      * @return true si l'objet est dans le sac, false sinon
      */
-    public boolean contains(Collectible item) { return items.contains(item); }
+    public boolean contains(ICollectible item) { return items.contains(item); }
 
     /**
      * Méthode permettant de transférer les objets d'un sac vers un autre (dans la limite de la capacité du sac de destination)
@@ -104,7 +108,7 @@ public class Bag
     public static void transfer(Bag from, Bag into)
     {
         if (from == into | from == null | into == null) { return; }
-        for (Collectible item : from.getItems())
+        for (ICollectible item : from.getItems())
         {
             try { into.push(from.pop(item)); }
             catch (BagFullException e) { System.out.println(e.getMessage()); }
@@ -120,7 +124,7 @@ public class Bag
     {
         StringBuilder string = new StringBuilder(String.format("Bag [%d | %d/%d kg ]", items.size(), weight, capacity));
         if (items.isEmpty()) { return string + "\n" + Constants.BULLET_POINT + "Empty"; }
-        for (Collectible item : items) { string.append("\n" + Constants.BULLET_POINT).append(item.toString()).append("[").append(item.getWeight()).append(" kg]"); }
+        for (ICollectible item : items) { string.append("\n" + Constants.BULLET_POINT).append(item.toString()).append("[").append(item.getWeight()).append(" kg]"); }
         return string.toString();
     }
 }

@@ -1,10 +1,10 @@
 package lsg.consumables;
 
 import javafx.beans.property.SimpleBooleanProperty;
-import lsg.bags.Collectible;
 import lsg.exceptions.ConsumeEmptyException;
+import lsg_api.consumables.IConsumable;
 
-public class Consumable implements Collectible
+public class Consumable implements IConsumable
 {
     /////////////// FIELDS ///////////////
     private final String name;

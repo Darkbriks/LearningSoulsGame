@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 public class ImageFactory {
@@ -41,6 +43,10 @@ public class ImageFactory {
         SPRITES_ID(String path) { this.path = path ; }
     }
 
+    static boolean isJar = ImageFactory.class.getResource("images").toString().startsWith("jar:");
+    static String jarPath = ImageFactory.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    static String imagesPath = "lsg/graphics/";
+
     private static final HashMap<SPRITES_ID, Image[]> sprites = new HashMap<>() ;
 
     /**
@@ -51,8 +57,10 @@ public class ImageFactory {
     public static void preloadAll(Runnable finishedHandler){
         new Thread(()-> {
             try {
-                for (SPRITES_ID id : SPRITES_ID.values()) {
-                    load(id);
+                for (SPRITES_ID id : SPRITES_ID.values())
+                {
+                    if (isJar) { loadInJar(id); }
+                    else { load(id); }
                 }
                 if(finishedHandler != null) finishedHandler.run();
             } catch (URISyntaxException | IOException e) {
@@ -70,8 +78,9 @@ public class ImageFactory {
         Image[] images = sprites.get(id) ;
         if(images == null) {
             try {
-                images = load(id) ;
-            } catch (URISyntaxException | IOException e) {
+                if (isJar) { images = loadInJar(id); }
+                else { images = load(id); }
+            } catch (URISyntaxException | IOException | NullPointerException e) {
                 System.err.println("Error in ImageFactory.getSprites() : " + e.getMessage());
             }
         }
@@ -100,4 +109,33 @@ public class ImageFactory {
         return images ;
     }
 
+    private static Image[] loadInJar(SPRITES_ID id) throws URISyntaxException, IOException
+    {
+        String spritePath = id.path;
+        String path = imagesPath + spritePath;
+
+        try (JarFile jarFile = new JarFile(jarPath))
+        {
+            JarEntry entry = jarFile.getJarEntry(path);
+            Image[] images;
+
+            if (entry.isDirectory())
+            {
+                List<JarEntry> entries = jarFile.stream().filter(e -> e.getName().startsWith(path) && !e.isDirectory()).collect(Collectors.toList());
+                images = new Image[entries.size()];
+                int i = 0;
+                for (JarEntry e : entries)
+                {
+                    images[i] = new Image(jarFile.getInputStream(e));
+                    i++;
+                }
+            }
+            else
+            {
+                images = new Image[]{new Image(jarFile.getInputStream(entry))};
+            }
+            ImageFactory.sprites.put(id, images);
+            return images;
+        }
+    }
 }

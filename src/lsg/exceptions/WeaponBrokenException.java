@@ -1,6 +1,6 @@
 package lsg.exceptions;
 
-import lsg.weapons.Weapon;
+import lsg_api.weapon.IWeapon;
 
 /**
  * Exception quand l'arme est cassée
@@ -10,17 +10,17 @@ public class WeaponBrokenException extends Exception
     /**
      * Arme cassée (Weapon) (private) (final)
      */
-    private final Weapon weapon;
+    private final IWeapon weapon;
 
     /**
      * Constructeur de l'exception
      * Affiche "(arme) is broken"
      * @param weapon arme cassée
      */
-    public WeaponBrokenException(Weapon weapon) { super(weapon + " is broken"); this.weapon = weapon;}
+    public WeaponBrokenException(IWeapon weapon) { super(weapon + " is broken"); this.weapon = weapon;}
     /**
      * Getter de l'arme cassée
      * @return arme cassée
      */
-    private Weapon getWeapon() { return weapon; }
+    private IWeapon getWeapon() { return weapon; }
 }
