@@ -1,5 +1,6 @@
 package user_mods;
 
+import lsg.utils.Version;
 import lsg_api.ConsoleAPI;
 
 import java.io.OutputStream;
@@ -9,17 +10,39 @@ public abstract class Mod
 {
     protected String name;
     protected String description;
-    protected String version;
+    protected Version modVersion;
+    protected Version[] apiVersions;
+    protected Version[] gameVersions;
     private final int id;
+
+    @Deprecated
+    protected String version;
 
     private static int nextId = 0;
 
+    public Mod(String name, String description, Version modVersion, Version[] apiVersions, Version[] gameVersions)
+    {
+        this.name = name;
+        this.description = description;
+        this.modVersion = modVersion;
+        this.apiVersions = apiVersions;
+        this.gameVersions = gameVersions;
+        this.id = nextId++;
+    }
+
+    public Mod(String name, String description, Version modVersion, Version apiVersion, Version gameVersion) { this(name, description, modVersion, new Version[] {apiVersion}, new Version[] {gameVersion}); }
+
+    @Deprecated
     public Mod(String name, String description, String version)
     {
+        ConsoleAPI.warn("[Mod][Constructor] Deprecated constructor used, please use #Mod(String, String, Version, Version[], Version[]) instead. This will be removed in 0.3.0 API update.");
         this.name = name;
         this.description = description;
         this.version = version;
         this.id = nextId++;
+        this.modVersion = null;
+        this.apiVersions = null;
+        this.gameVersions = null;
     }
 
     public String getName() { return name; }
@@ -38,6 +61,20 @@ public abstract class Mod
             }
         }
         return null;
+    }
+
+    public boolean isCompatibleWithAPI(Version version)
+    {
+        if (apiVersions == null) { ConsoleAPI.warn("[Mod][isCompatibleWithAPI] No API version specified, assuming compatible. This will be changed in 0.3.0 API update."); return true; }
+        for (Version apiVersion : apiVersions) { if (apiVersion.isEquals(version, true)) { return true; } }
+        return false;
+    }
+
+    public boolean isCompatibleWithGame(Version version)
+    {
+        if (gameVersions == null) { ConsoleAPI.warn("[Mod][isCompatibleWithGame] No game version specified, assuming compatible. This will be changed in 0.3.0 API update."); return true; }
+        for (Version gameVersion : gameVersions) { if (gameVersion.isEquals(version, true)) { return true; } }
+        return false;
     }
 
     public void awake() {}

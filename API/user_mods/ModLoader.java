@@ -1,5 +1,6 @@
 package user_mods;
 
+import lsg.utils.Constants;
 import lsg_api.ConsoleAPI;
 
 import java.io.File;
@@ -65,6 +66,15 @@ public class ModLoader
             String modClassName = jarFile.getManifest().getMainAttributes().getValue("Main-Class");
             Class<?> modClass = classLoader.loadClass(modClassName);
             Mod newMod = (Mod) modClass.getDeclaredConstructor().newInstance();
+
+            if (!newMod.isCompatibleWithAPI(Constants.API_VERSION) || !newMod.isCompatibleWithGame(Constants.GAME_VERSION))
+            {
+                ConsoleAPI.warn("[ModLoader][loadMod] Mod " + newMod.getName() + " is not compatible with the current API or Game version. It will not be loaded.");
+                classLoader.close();
+                jarFile.close();
+                return;
+            }
+
             newMod.onLoaded();
 
             String modClassWindow = jarFile.getManifest().getMainAttributes().getValue("Window-Class");
