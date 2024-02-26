@@ -7,6 +7,30 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+
+- Classe `Version` qui permet de gérer de manière plus precise les differentes version du jeu et de l'API
+  - Getters pour les champs `major`, `minor`, `patch`, `label`, `build`
+  - Méthode `toString` qui permet de récupérer une représentation textuelle de la version
+  - isEquals, isGreaterThan, isGreaterThanOrEquals, isLowerThan, isLowerThanOrEquals qui permettent de comparer deux versions
+- Champs `gameVersions` et `apiVersions` dans la classe `Mod` qui permettent de définir les versions du jeu et de l'API nécessaires pour le mod
+- Champ `modVersion` dans la classe `Mod` qui permet de définir la version du mod
+- Méthode `isCompatibleWithAPI` et `isCompatibleWithGame` dans la classe `Mod` qui permettent de vérifier la compatibilité du mod avec l'API et le jeu
+  - Ces méthodes utilisent la classe `Version` pour comparer les versions
+  - Actuellement, si le mod définit une version du jeu ou de l'API à `null`, il est considéré comme compatible
+  - Dans la version 0.3.0, les versions du jeu et de l'API seront obligatoires, et si elles ne sont pas définies, le mod sera considéré comme incompatible
+
+### Changed
+
+- Méthode `load` dans la classe `ModLoader` pour prendre en charge les nouvelles méthodes de vérification de compatibilité entre le mod, le jeu et l'API
+
+### Deprecated
+
+- Champs `version` dans la classe `Mod` qui est remplacé par le champ `modVersion`
+  - Sera supprimé dans la version 0.3.0
+- Constructeur de la classe `Mod` qui prend en paramètre une version de type `String` qui est remplacé par une version de type `Version`
+  - Sera supprimé dans la version 0.3.0
+
 ### Removed
 
 - Messages de debug oubliés dans les méthodes de la classe `Mod`

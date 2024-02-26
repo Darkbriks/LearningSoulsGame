@@ -1,6 +1,6 @@
 package lsg.exceptions;
 
-import lsg.consumables.Consumable;
+import lsg_api.consumables.IConsumable;
 
 /**
  * Classe pour les exceptions de consommables null
@@ -13,6 +13,6 @@ public class ConsumeNullException extends ConsumeException
      */
     public ConsumeNullException()
     {
-        super("Consumable is null", new Consumable("null", 0, "null"));
+        super("Consumable is null", IConsumable.NULL_CONSUMABLE);
     }
 }
