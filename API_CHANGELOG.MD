@@ -7,6 +7,8 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## ## [0.2.3] - 2024-02-26
+
 ### Added
 
 - Classe `Version` qui permet de gérer de manière plus precise les differentes version du jeu et de l'API
@@ -19,10 +21,15 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Ces méthodes utilisent la classe `Version` pour comparer les versions
   - Actuellement, si le mod définit une version du jeu ou de l'API à `null`, il est considéré comme compatible
   - Dans la version 0.3.0, les versions du jeu et de l'API seront obligatoires, et si elles ne sont pas définies, le mod sera considéré comme incompatible
+- Classe `Main` qui affiche un message dans la console pour rediriger l'utilisateur vers le repos de l'API
+  - Cette classe a été ajoutée dans le cas ou l'utilisateur lance le jar de l'API au lieu de lancer le jeu
+- Constantes `NULL_CONSUMABLE` dans l'interface `IConsumable` qui permettent de définir un objet consommable nul
 
 ### Changed
 
 - Méthode `load` dans la classe `ModLoader` pour prendre en charge les nouvelles méthodes de vérification de compatibilité entre le mod, le jeu et l'API
+- Fichier `MANIFEST.MF` pour ajouter les champs `Main-Class` pour permettre de lancer l'API avec `java -jar LSG_API<version>.jar`
+- La classe `ConsumeNullException` utilse maintenant la constante `NULL_CONSUMABLE` de l'inteface `IConsumable` à la place de `new Consumable(null, 0, null)`
 
 ### Deprecated
 
@@ -34,6 +41,10 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Removed
 
 - Messages de debug oubliés dans les méthodes de la classe `Mod`
+- Classe `CharacterAPI` et toutes ses méthodes
+  - Cette classe avait été dépréciée dans la version 0.2.0
+- Documentation publique et privée
+  - Devenue obsolète. Une nouvelle documentation est en cours de rédaction (pas encore de release prévue)
 
 ## [0.2.2] - 2024-02-22
 

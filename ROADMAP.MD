@@ -2,6 +2,8 @@
 
 Ce document donne un aperçu des fonctionnalités que nous souhaitons ajouter dans les prochaines versions du projet.
 
+## Format
+
 Pour l'ajout de fonctionnalités, le format est le suivant :
 
 - **Version** : version du projet envisagée pour la sortie de la fonctionnalité
@@ -22,9 +24,29 @@ Pour les corrections de bugs, le format est le suivant :
 - **Issue de résolution** : numéro de l'issue qui a résolu le bug (si existante)
 - **Commit de résolution** : numéro du commit qui a résolu le bug (si existant)
 
-## Annexe 1 : Niveaux de criticité des bugs
+### Annexe 1 : Niveaux de criticité des bugs
 
 - **Faible** : le bug n'a pas d'impact réel sur l'utilisation du jeu du point de vue de l'utilisateur (ex : faute de frappe dans un message, couleur de texte incorrecte, etc.)
 - **Moyen** : le bug a un impact mineur sur l'utilisation du jeu du point de vue de l'utilisateur (ex : message d'erreur dans la console, comportement inattendu non bloquant, etc.)
 - **Élevé** : le bug a un impact majeur sur l'utilisation du jeu (ex : comportement inattendu bloquant, graphismes corrompus, etc.)
 - **Critique** : le bug empêche l'utilisation du jeu (ex : crash du jeu, perte de données, etc.)
+
+## Roadmap
+
+### Documentation API publique
+
+- **Version** : dès que possible
+- **Fonctionnalité** : documentation publique expliquant comment utiliser l'API du projet pour créer des mods
+- **Priorité** : moyenne
+- **Difficulté** : faible
+- **Statut** : à faire
+- **Issue associée** : aucun
+
+### Amélioration de la classe `ModdedWindow`
+
+- **Version** : 0.2.4
+- **Fonctionnalité** : amélioration de la classe `ModdedWindow` pour permettre une meilleure gestion des fenêtres moddées, notamment en prenant en charge d'autres blibliothèques graphiques que `Swing`, et en simplifiant la création et la gestion des fenêtres
+- **Priorité** : élevée
+- **Difficulté** : moyenne
+- **Statut** : à faire
+- **Issue associée** : aucun
