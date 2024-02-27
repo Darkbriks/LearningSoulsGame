@@ -11,16 +11,15 @@ import java.util.HashSet;
 
 public interface ICharacter
 {
-    HashSet<ICharacter> characters = new HashSet<>();
-
-    static void addCharacter(ICharacter character) { characters.add(character); }
-    static void removeCharacter(ICharacter character) { characters.remove(character); }
-
-    static ICharacter getCharacter(String name)
-    {
-        for (ICharacter character : characters) { if (character.getName().equals(name)) { return character; } }
-        return null;
-    }
+    /////////////// STATIC ///////////////
+    static ICharacter getCharacter(String name) { return CharacterContainer.getCharacter(name); }
+    static IHero getHero() { return CharacterContainer.getHero(); }
+    static IMonster getMonster() { return CharacterContainer.getMonster(); }
+    static boolean setCharacter(String name, ICharacter newCharacter) { return CharacterContainer.setCharacter(name, newCharacter); }
+    static void setHero(IHero hero) { CharacterContainer.setHero(hero); }
+    static void setMonster(IMonster monster) { CharacterContainer.setMonster(monster); }
+    static void addCharacter(ICharacter character) { CharacterContainer.addCharacter(character); }
+    static void removeCharacter(ICharacter character) { CharacterContainer.removeCharacter(character); }
 
     /////////////// GETTERS ///////////////
     String getName();
@@ -67,4 +66,35 @@ public interface ICharacter
     /////////////// OVERRIDES ///////////////
     @Override
     String toString();
+}
+
+abstract class CharacterContainer
+{
+    private static HashSet<ICharacter> characters = new HashSet<>();
+    private static IHero hero = null;
+    private static IMonster monster = null;
+
+    static ICharacter getCharacter(String name)
+    {
+        for (ICharacter character : characters) { if (character.getName().equals(name)) { return character; } }
+        return null;
+    }
+
+    static IHero getHero() { return hero; }
+
+    static IMonster getMonster() { return monster; }
+
+    static boolean setCharacter(String name, ICharacter newCharacter)
+    {
+        for (ICharacter character : characters) { if (character.getName().equals(name)) { character = newCharacter; return true; } }
+        return false;
+    }
+
+    static void setHero(IHero hero) { CharacterContainer.hero = hero; }
+
+    static void setMonster(IMonster monster) { CharacterContainer.monster = monster; }
+
+    static void addCharacter(ICharacter character) { characters.add(character); }
+
+    static void removeCharacter(ICharacter character) { characters.remove(character); }
 }

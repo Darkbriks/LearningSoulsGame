@@ -7,6 +7,10 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+
+- Classe friendly `CharacterContainer` dans `ICharacter` pour gérer le stockage des instances de `ICharacter`
+
 ## [0.2.3] - 2024-02-26
 
 ### Added
