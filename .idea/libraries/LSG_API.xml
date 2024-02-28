@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="LSG_API">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/LSG_API_v0-2-4-pre_release_1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
