@@ -1,5 +1,8 @@
 package lsg.exceptions;
 
+import lsg.data.XMLFactory;
+import lsg.utils.Constants;
+
 /**
  * Classe NoBagException
  * Hérite de la classe Exception
@@ -13,6 +16,6 @@ public class NoBagException extends Exception
      */
     public NoBagException()
     {
-        super("No bag has been equipped !");
+        super(XMLFactory.getText(XMLFactory.TEXTE_ID.NO_BAG).toString(Constants.getLang()));
     }
 }

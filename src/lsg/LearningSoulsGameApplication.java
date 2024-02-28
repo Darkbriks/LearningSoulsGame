@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -16,6 +15,8 @@ import javafx.stage.Stage;
 import lsg.characters.Hero;
 import lsg.characters.Zombie;
 import lsg.consumables.food.SuperBerry;
+import lsg.data.XMLFactory;
+import lsg.data.texts.TooltipTexts;
 import lsg.graphics.CSSFactory;
 import lsg.graphics.ImageFactory;
 import lsg.graphics.panes.AnimationPane;
@@ -26,7 +27,6 @@ import lsg.graphics.widgets.characters.renderers.CharacterRenderer;
 import lsg.graphics.widgets.characters.renderers.HeroRenderer;
 import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
-import lsg.texts.TooltipTexts;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
 import lsg_api.ConsoleAPI;
@@ -37,17 +37,6 @@ import user_mods.ModLoader;
 
 public class LearningSoulsGameApplication extends Application
 {
-    ////////// SINGLETON //////////
-    @Deprecated
-    private static LearningSoulsGameApplication instance = null;
-
-    @Deprecated
-    public static LearningSoulsGameApplication getInstance()
-    {
-        ConsoleAPI.warn("LearningSoulsGameApplication.getInstance() is deprecated, and will be removed in a future version. This method will not be replaced.");
-        return instance;
-    }
-
     ////////// ATTRIBUTES //////////
     private Scene scene;
     private AnchorPane root;
@@ -65,20 +54,6 @@ public class LearningSoulsGameApplication extends Application
     private final IntegerProperty score = new SimpleIntegerProperty();
     private ModLoader modLoader;
 
-    ////////// GETTERS //////////
-    @Deprecated
-    public Hero getHero()
-    {
-        ConsoleAPI.warn("LearningSoulsGameApplication.getHero() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
-        return (Hero) hero;
-    }
-    @Deprecated
-    public Zombie getZombie()
-    {
-        ConsoleAPI.warn("LearningSoulsGameApplication.getZombie() is deprecated and will be removed in a future version. Please use ICharacter.getCharacter(String) instead.");
-        return (Zombie) zombie;
-    }
-
     ////////// MAIN //////////
     public static void main(String[] args) { launch(args); }
 
@@ -86,8 +61,6 @@ public class LearningSoulsGameApplication extends Application
     @Override
     public void start(Stage stage)
     {
-        instance = this;
-
         modLoader = ModLoader.getInstance();
         modLoader.loadMods();
 
@@ -167,6 +140,7 @@ public class LearningSoulsGameApplication extends Application
         if (heroName == null || heroName.isEmpty() || heroName.replace(" ", "").isEmpty()) { hero = new Hero(); }
         else { hero = new Hero(heroName); }
         hero.setWeapon(new Sword());
+        hero.setStamina(0);
         hero.setConsumable(new SuperBerry());
         heroRenderer = animationPane.createHeroRenderer();
         animationPane.initHeroInScene(heroRenderer);
@@ -175,6 +149,8 @@ public class LearningSoulsGameApplication extends Application
         hudPane.getHeroStatbar().setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
         hudPane.getHeroStatbar().getLifeBar().progressProperty().bind(hero.lifeRateProperty());
         hudPane.getHeroStatbar().getStaminaBar().progressProperty().bind(hero.staminaRateProperty());
+
+        ICharacter.setHero(hero);
     }
 
     private void createMonster(EventHandler<ActionEvent> finishedHandler)
@@ -194,6 +170,8 @@ public class LearningSoulsGameApplication extends Application
         hudPane.getMonsterStatbar().setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
         hudPane.getMonsterStatbar().getLifeBar().progressProperty().bind(zombie.lifeRateProperty());
         hudPane.getMonsterStatbar().getStaminaBar().progressProperty().bind(zombie.staminaRateProperty());
+
+        ICharacter.setMonster(zombie);
     }
 
     private void startGame()
@@ -201,7 +179,10 @@ public class LearningSoulsGameApplication extends Application
         new java.util.Timer().schedule(new java.util.TimerTask() {
             @Override public void run()
             {
-                gameTitle.zoomIn(event1 -> creationPane.fadeIn(event2 -> ImageFactory.preloadAll((() -> System.out.println("Preloading done")))));
+                gameTitle.zoomIn(event1 -> creationPane.fadeIn(event2 -> ImageFactory.preloadAll((() -> {
+                    XMLFactory.preloadAll((() -> System.out.println("Preload finished")));
+                }
+                ))) );
             }
         }, Constants.TITLE_ANIMATION_DELAY);
     }

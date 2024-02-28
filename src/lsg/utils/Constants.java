@@ -1,6 +1,9 @@
 package lsg.utils;
 
 import javafx.util.Duration;
+import lsg.graphics.ImageFactory;
+
+import java.util.Objects;
 
 public class Constants
 {
@@ -43,4 +46,42 @@ public class Constants
     public static final int GAME_HEIGHT = 800;
     public static Duration TITLE_ANIMATION_DURATION = Duration.millis(1000);
     public static final int TITLE_ANIMATION_DELAY = 250;
+
+    /////////////// GAME INFO ///////////////
+    public static final boolean IS_JAR = Objects.requireNonNull(ImageFactory.class.getResource("images")).toString().startsWith("jar:");
+    public static final String JAR_PATH = ImageFactory.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    public static final String IMAGES_PATH = "lsg/graphics/";
+
+    /////////////// LANG ///////////////
+    /**
+     * Cette énumération permet de définir les langues disponibles
+     */
+    public enum LANG {
+        EN("en"), FR("fr"), DE("de"), ES("es");
+
+        private final String lang;
+        LANG(String lang) { this.lang = lang; }
+
+        /**
+         * Cette méthode permet de récupérer la langue correspondant à une chaîne de caractères
+         * @return : la langue correspondante
+         */
+        public String toString() { return lang; }
+
+        /**
+         * Cette méthode permet de récupérer la langue correspondant à une chaîne de caractères
+         * @param lang : la chaîne de caractères correspondant à la langue
+         * @return : la langue correspondante
+         * @throws IllegalArgumentException : si la chaîne de caractères ne correspond à aucune langue
+         */
+        public static LANG fromString(String lang) {
+            for (LANG l : LANG.values()) { if (l.toString().equals(lang)) { return l; } }
+            throw new IllegalArgumentException("No enum constant lsg.data.texts.InterpretableText.LANG." + lang);
+        }
+    }
+
+    private static LANG lang = LANG.EN;
+    public static LANG getLang() { return lang; }
+    public static void setLang(LANG lang) { Constants.lang = lang; }
+    public static String[] getLangList() { return new String[]{LANG.EN.toString(), LANG.FR.toString(), LANG.DE.toString(), LANG.ES.toString()}; }
 }

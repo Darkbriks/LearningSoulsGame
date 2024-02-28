@@ -1,6 +1,8 @@
 package lsg.exceptions;
 
 import lsg.consumables.Consumable;
+import lsg.data.XMLFactory;
+import lsg.utils.Constants;
 
 /**
  * Classe pour les exceptions de consommables null
@@ -13,6 +15,6 @@ public class ConsumeNullException extends ConsumeException
      */
     public ConsumeNullException()
     {
-        super("Consumable is null", new Consumable("null", 0, "null"));
+        super(XMLFactory.getText(XMLFactory.TEXTE_ID.CONSUME_NULL).toString(Constants.getLang()), new Consumable("null", 0, "null"));
     }
 }

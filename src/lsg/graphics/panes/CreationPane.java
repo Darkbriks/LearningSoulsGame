@@ -1,8 +1,11 @@
 package lsg.graphics.panes;
 
 import javafx.animation.FadeTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import lsg.graphics.CSSFactory;
@@ -44,6 +47,18 @@ public class CreationPane extends VBox
 
         this.nameLabel.setTranslateY((double) Constants.GAME_HEIGHT /2 - this.nameLabel.getHeight()*1.25);
         this.nameField.setTranslateY((double) Constants.GAME_HEIGHT /2);
+
+        // Créer un dropdown pour les langues en haut à droite
+        ObservableList<Constants.LANG> langList = FXCollections.observableArrayList(Constants.LANG.values());
+        ComboBox<Constants.LANG> langComboBox = new ComboBox<>(langList);
+        langComboBox.setValue(Constants.getLang());
+        langComboBox.setOnAction(event -> Constants.setLang(langComboBox.getValue()));
+        langComboBox.setVisibleRowCount(3);
+
+        this.getChildren().add(langComboBox);
+
+        langComboBox.setTranslateX((double) Constants.GAME_WIDTH - 65);
+        langComboBox.setTranslateY(-155);
 
         this.setOpacity(0);
         this.setVisible(true);

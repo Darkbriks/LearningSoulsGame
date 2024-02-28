@@ -22,6 +22,17 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Ajout d'un test pour vérifier que l'action n'est pas `null` dans la méthode `trigger` de la classe `SkillTrigger`
   - L'absence de cette vérification provoquait un message d'erreur dans la console lorsqu'une compétence non initialisée était utilisée
 
+### Removed
+
+- Classe `Test` supprimée
+  - Cette classe avait été dépréciée dans la version 0.3.0 du jeu.
+- Méthode `getHero` de la classe `LearningSoulsGameApplication` supprimée
+  - Cette méthode avait été dépréciée dans la version 0.3.0 du jeu.
+- Méthode `getZombie` de la classe `LearningSoulsGameApplication` supprimée
+  - Cette méthode avait été dépréciée dans la version 0.3.0 du jeu.
+- Singleton de la classe `LearningSoulsGameApplication` supprimé
+  - Cette fonctionnalité avait été dépréciée dans la version 0.3.0 du jeu.
+
 ## [0.3.1] - 2024-02-24
 
 ### Added

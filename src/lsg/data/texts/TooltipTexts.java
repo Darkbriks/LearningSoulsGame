@@ -1,4 +1,4 @@
-package lsg.texts;
+package lsg.data.texts;
 
 import lsg_api.consumables.IConsumable;
 import lsg_api.weapon.IWeapon;

@@ -1,5 +1,6 @@
 package lsg.exceptions;
 
+import lsg.data.XMLFactory;
 import lsg_api.bags.IBag;
 
 /**
@@ -20,7 +21,7 @@ public class BagFullException extends Exception
      */
     public BagFullException(IBag bag)
     {
-        super(bag.getClass().getSimpleName() + " is full");
+        super(bag.getClass().getSimpleName() + XMLFactory.getText(XMLFactory.TEXTE_ID.BAG_FULL));
         this.bag = bag;
     }
 

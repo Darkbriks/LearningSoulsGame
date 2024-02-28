@@ -14,6 +14,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
+import static lsg.utils.Constants.*;
+
 public class ImageFactory {
 
     public static enum SPRITES_ID {
@@ -43,10 +45,6 @@ public class ImageFactory {
         SPRITES_ID(String path) { this.path = path ; }
     }
 
-    static boolean isJar = ImageFactory.class.getResource("images").toString().startsWith("jar:");
-    static String jarPath = ImageFactory.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-    static String imagesPath = "lsg/graphics/";
-
     private static final HashMap<SPRITES_ID, Image[]> sprites = new HashMap<>() ;
 
     /**
@@ -59,7 +57,7 @@ public class ImageFactory {
             try {
                 for (SPRITES_ID id : SPRITES_ID.values())
                 {
-                    if (isJar) { loadInJar(id); }
+                    if (IS_JAR) { loadInJar(id); }
                     else { load(id); }
                 }
                 if(finishedHandler != null) finishedHandler.run();
@@ -78,7 +76,7 @@ public class ImageFactory {
         Image[] images = sprites.get(id) ;
         if(images == null) {
             try {
-                if (isJar) { images = loadInJar(id); }
+                if (IS_JAR) { images = loadInJar(id); }
                 else { images = load(id); }
             } catch (URISyntaxException | IOException | NullPointerException e) {
                 System.err.println("Error in ImageFactory.getSprites() : " + e.getMessage());
@@ -112,9 +110,9 @@ public class ImageFactory {
     private static Image[] loadInJar(SPRITES_ID id) throws URISyntaxException, IOException
     {
         String spritePath = id.path;
-        String path = imagesPath + spritePath;
+        String path = IMAGES_PATH + spritePath;
 
-        try (JarFile jarFile = new JarFile(jarPath))
+        try (JarFile jarFile = new JarFile(JAR_PATH))
         {
             JarEntry entry = jarFile.getJarEntry(path);
             Image[] images;

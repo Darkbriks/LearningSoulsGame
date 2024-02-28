@@ -1,5 +1,7 @@
 package lsg.exceptions;
 
+import lsg.data.XMLFactory;
+import lsg.utils.Constants;
 import lsg_api.consumables.IConsumable;
 
 /**
@@ -13,6 +15,6 @@ public class ConsumeEmptyException extends ConsumeException
      */
     public ConsumeEmptyException(IConsumable consumable)
     {
-        super(consumable.getName() + " has no more charges", consumable);
+        super(consumable.getName() + XMLFactory.getText(XMLFactory.TEXTE_ID.CONSUME_EMPTY).toString(Constants.getLang()), consumable);
     }
 }

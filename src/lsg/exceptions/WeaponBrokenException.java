@@ -1,5 +1,7 @@
 package lsg.exceptions;
 
+import lsg.data.XMLFactory;
+import lsg.utils.Constants;
 import lsg_api.weapon.IWeapon;
 
 /**
@@ -17,7 +19,7 @@ public class WeaponBrokenException extends Exception
      * Affiche "(arme) is broken"
      * @param weapon arme cassée
      */
-    public WeaponBrokenException(IWeapon weapon) { super(weapon + " is broken"); this.weapon = weapon;}
+    public WeaponBrokenException(IWeapon weapon) { super(weapon + XMLFactory.getText(XMLFactory.TEXTE_ID.WEAPON_BROKEN).toString(Constants.getLang())); this.weapon = weapon;}
     /**
      * Getter de l'arme cassée
      * @return arme cassée
