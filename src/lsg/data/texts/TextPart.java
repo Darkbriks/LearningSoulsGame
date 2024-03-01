@@ -89,6 +89,7 @@ public class TextPart
                         if (part.equals("HERO")) { objects = getHero(); continue; }
                         if (part.equals("MONSTER")) { objects = getMonster(); continue; }
                         if (part.contains("CHARACTER")) { objects = getCharacter(part.split("~")[1]); continue; }
+                        if (part.equals("CONSUMABLE")) { objects = getHero().getConsumable(); continue; }
                         if (part.contains("~")) { objects = executeWithArgs(part, objects); continue; }
 
                         Method method = objects.getClass().getMethod(part);

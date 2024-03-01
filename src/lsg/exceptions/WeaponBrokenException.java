@@ -19,7 +19,7 @@ public class WeaponBrokenException extends Exception
      * Affiche "(arme) is broken"
      * @param weapon arme cassée
      */
-    public WeaponBrokenException(IWeapon weapon) { super(weapon + XMLFactory.getText(XMLFactory.TEXTE_ID.WEAPON_BROKEN).toString(Constants.getLang())); this.weapon = weapon;}
+    public WeaponBrokenException(IWeapon weapon) { super(weapon.getName() + XMLFactory.getText(XMLFactory.TEXTE_ID.WEAPON_BROKEN).toString(Constants.getLang())); this.weapon = weapon;}
     /**
      * Getter de l'arme cassée
      * @return arme cassée

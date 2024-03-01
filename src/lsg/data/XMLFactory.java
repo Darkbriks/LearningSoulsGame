@@ -32,6 +32,12 @@ public class XMLFactory
         STAMINA_EMPTY                   ("xml/exceptions.xml"),
         WEAPON_BROKEN                   ("xml/exceptions.xml"),
         WEAPON_NULL                     ("xml/exceptions.xml"),
+
+        ////////// SKILL TOOLTIPS //////////
+        DEFAULT_SKILL_TOOLTIP            ("xml/skillTooltips.xml"),
+        SKILL_TOOLTIP_1                  ("xml/skillTooltips.xml"), // Basic attack
+        SKILL_TOOLTIP_2                  ("xml/skillTooltips.xml"), // Recuperate
+        SKILL_TOOLTIP_CONSUME            ("xml/skillTooltips.xml"), // Consume
         ;
 
         private final String path ;
@@ -94,7 +100,7 @@ public class XMLFactory
         {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(Objects.requireNonNull(XMLFactory.class.getResource(id.path).toString()));
+            Document doc = db.parse(Objects.requireNonNull(Objects.requireNonNull(XMLFactory.class.getResource(id.path)).toString()));
             Element root = doc.getDocumentElement();
             InterpretableText texte = null;
 
@@ -114,7 +120,18 @@ public class XMLFactory
         catch (Exception e) { System.err.println("Error in XMLFactory.loadXML() : " + e.getClass().getSimpleName() + " - " + e.getMessage()); }
     }
 
-    public static void main(String[] args)
+    public static void createXMLFiles()
+    {
+        new XMLTemplateFile().CreateXML();
+        new XMLExceptionFile().CreateXML();
+        new XMLSkillTooltipFile().CreateXML();
+    }
+
+    public static void main(String[] args) { createXMLFiles(); }
+}
+
+class XMLTemplateFile {
+    void CreateXML()
     {
         InterpretableText text = new InterpretableText(
                 new HashMap<LANG, TextPart[]>()
@@ -126,99 +143,247 @@ public class XMLFactory
                 }}
         );
 
-        createXML(new TEXTE_ID[] { TEXTE_ID.TEMPLATE }, new InterpretableText[] { text });
+        XMLFactory.createXML(new XMLFactory.TEXTE_ID[] { XMLFactory.TEXTE_ID.TEMPLATE }, new InterpretableText[] { text });
+    }
+}
 
+class XMLExceptionFile {
+    void CreateXML()
+    {
         InterpretableText[] texts = new InterpretableText[]
         {
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " is full !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " est plein !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " ist voll !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " está lleno !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " is full !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " est plein !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " ist voll !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " está lleno !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " has no more charges !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " n'a plus de charges !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " hat keine Ladungen mehr !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " ya no tiene cargas !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " has no more charges !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " n'a plus de charges !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " hat keine Ladungen mehr !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " ya no tiene cargas !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Consumable is null !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Le consommable est nul !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Verbrauchsmaterial ist null !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "El consumible es nulo !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Consumable is null !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Le consommable est nul !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Verbrauchsmaterial ist null !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "El consumible es nulo !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Weapon is null !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "L'arme est nulle !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Waffe ist null !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "El arma es nula !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Weapon is null !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "L'arme est nulle !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Waffe ist null !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "El arma es nula !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "No bag has been equipped !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Aucun sac n'a été équipé !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Keine Tasche wurde ausgerüstet !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "No se ha equipado ninguna bolsa !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "No bag has been equipped !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Aucun sac n'a été équipé !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Keine Tasche wurde ausgerüstet !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "No se ha equipado ninguna bolsa !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Stamina is empty !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "La stamina est vide !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Die Ausdauer ist leer !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "La resistencia está vacía !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Stamina is empty !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "La stamina est vide !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Die Ausdauer ist leer !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "La resistencia está vacía !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " is broken !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " est cassée !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " ist kaputt !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " está rota !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " is broken !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " est cassée !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " ist kaputt !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, " está rota !", null) });
+                }}
             ),
             new InterpretableText(
-                    new HashMap<LANG, TextPart[]>()
-                    {{
-                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Weapon is null !", null) });
-                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "L'arme est nulle !", null) });
-                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Waffe ist null !", null) });
-                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "El arma es nula !", null) });
-                    }}
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Weapon is null !", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "L'arme est nulle !", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Waffe ist null !", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "El arma es nula !", null) });
+                }}
             ),
         };
 
-        TEXTE_ID[] ids = new TEXTE_ID[]
+        XMLFactory.TEXTE_ID[] ids = new XMLFactory.TEXTE_ID[]
         {
-            TEXTE_ID.BAG_FULL,
-            TEXTE_ID.CONSUME_EMPTY,
-            TEXTE_ID.CONSUME_NULL,
-            TEXTE_ID.CONSUME_REPAIR_NULL_WEAPON,
-            TEXTE_ID.NO_BAG,
-            TEXTE_ID.STAMINA_EMPTY,
-            TEXTE_ID.WEAPON_BROKEN,
-            TEXTE_ID.WEAPON_NULL,
+            XMLFactory.TEXTE_ID.BAG_FULL,
+            XMLFactory.TEXTE_ID.CONSUME_EMPTY,
+            XMLFactory.TEXTE_ID.CONSUME_NULL,
+            XMLFactory.TEXTE_ID.CONSUME_REPAIR_NULL_WEAPON,
+            XMLFactory.TEXTE_ID.NO_BAG,
+            XMLFactory.TEXTE_ID.STAMINA_EMPTY,
+            XMLFactory.TEXTE_ID.WEAPON_BROKEN,
+            XMLFactory.TEXTE_ID.WEAPON_NULL,
         };
-        createXML(ids, texts);
+        XMLFactory.createXML(ids, texts);
+    }
+}
 
-        preloadAll(() -> {
-            for (TEXTE_ID id : TEXTE_ID.values()) { System.out.println(getText(id).toString()); }
-        });
+class XMLSkillTooltipFile {
+    void CreateXML()
+    {
+        InterpretableText[] texts = new InterpretableText[]
+            {
+                new InterpretableText(
+                        new HashMap<LANG, TextPart[]>()
+                        {{
+                            put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "This is a default skill tooltip.", null) });
+                            put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Ceci est une info-bulle de compétence par défaut.", null) });
+                            put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Dies ist ein Standard-Skill-Tooltip.", null) });
+                            put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Esta es una información sobre la habilidad por defecto.", null) });
+                        }}
+                ),
+                new InterpretableText(
+                    new HashMap<LANG, TextPart[]>()
+                    {{
+                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Attack the ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "MONSTER.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " with your ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " for ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMinDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " to ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMaxDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " damage.~ENTER~Costs ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getStamCost", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " stamina points.", null)
+                        });
+                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Attaque le ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "MONSTER.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " avec ton ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " pour ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMinDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " à ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMaxDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " dégâts.~ENTER~Coûte ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getStamCost", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " points de stamina.", null)
+                        });
+                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Greift das ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "MONSTER.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " mit deiner ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " für ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMinDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " bis ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMaxDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " Schaden an.~ENTER~Kostet ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getStamCost", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " Ausdauerpunkte.", null)
+                        });
+                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Ataca al ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "MONSTER.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " con tu ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " para ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMinDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " a ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getMaxDamage", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " daño.~ENTER~Cuesta ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getWeapon.getStamCost", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " puntos de resistencia.", null)
+                        });
+                    }}
+                ),
+                new InterpretableText(
+                    new HashMap<LANG, TextPart[]>()
+                    {{
+                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Recuperates ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getLifeRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " life points and ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getStamRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " stamina points.", null)
+                        });
+                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Récupère ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getLifeRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " points de vie et ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getStamRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " points de stamina.", null)
+                        });
+                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Erholt ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getLifeRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " Lebenspunkte und ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getStamRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " Ausdauerpunkte.", null)
+                        });
+                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Recupera ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getLifeRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " puntos de vida y ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "HERO.getStamRegen", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " puntos de resistencia.", null)
+                        });
+                    }}
+                ),
+                new InterpretableText(
+                    new HashMap<LANG, TextPart[]>()
+                    {{
+                        put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Consume ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " and recover ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getCapacity", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " point of ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getStat", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, ".", null)
+                        });
+                        put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Consomme ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " et récupère ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getCapacity", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " point de ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getStat", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, ".", null)
+                        });
+                        put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Verbraucht ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " und erholt ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getCapacity", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " Punkt ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getStat", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, ".", null)
+                        });
+                        put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Consume ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getName", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " y recupera ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getCapacity", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, " punto de ", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.METHOD, "CONSUMABLE.getStat", null),
+                                new TextPart(TextPart.TEXT_PART_TYPE.STRING, ".", null)
+                        });
+                    }}
+                ),
+            };
+
+        XMLFactory.TEXTE_ID[] ids = new XMLFactory.TEXTE_ID[]
+        {
+            XMLFactory.TEXTE_ID.DEFAULT_SKILL_TOOLTIP,
+            XMLFactory.TEXTE_ID.SKILL_TOOLTIP_1,
+            XMLFactory.TEXTE_ID.SKILL_TOOLTIP_2,
+            XMLFactory.TEXTE_ID.SKILL_TOOLTIP_CONSUME,
+        };
+
+        XMLFactory.createXML(ids, texts);
     }
 }

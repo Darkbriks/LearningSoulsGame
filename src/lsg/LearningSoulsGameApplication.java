@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -16,7 +15,6 @@ import lsg.characters.Hero;
 import lsg.characters.Zombie;
 import lsg.consumables.food.SuperBerry;
 import lsg.data.XMLFactory;
-import lsg.data.texts.TooltipTexts;
 import lsg.graphics.CSSFactory;
 import lsg.graphics.ImageFactory;
 import lsg.graphics.panes.AnimationPane;
@@ -29,6 +27,7 @@ import lsg.graphics.widgets.characters.renderers.ZombieRenderer;
 import lsg.graphics.widgets.skills.SkillBar;
 import lsg.utils.Constants;
 import lsg.weapons.Sword;
+import lsg.weapons.Weapon;
 import lsg_api.ConsoleAPI;
 import lsg_api.characters.ICharacter;
 import lsg_api.characters.IHero;
@@ -122,15 +121,15 @@ public class LearningSoulsGameApplication extends Application
 
         skillBar.getTrigger(0).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.ATTACK_SKILL)[0]);
         skillBar.getTrigger(0).setAction(this::heroAttack);
-        skillBar.getTrigger(0).setTooltip(new Tooltip(TooltipTexts.attackTooltip(hero.getWeapon())));
+        skillBar.getTrigger(0).setTooltipID(XMLFactory.TEXTE_ID.SKILL_TOOLTIP_1);
 
         skillBar.getTrigger(1).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.RECUPERATE_SKILL)[0]);
         skillBar.getTrigger(1).setAction(this::heroRecuperate);
-        skillBar.getTrigger(1).setTooltip(new Tooltip(TooltipTexts.recuperateTooltip(hero.getLifeRegen(), hero.getStamRegen())));
+        skillBar.getTrigger(1).setTooltipID(XMLFactory.TEXTE_ID.SKILL_TOOLTIP_2);
 
         skillBar.getConsumableTrigger().setConsumable(hero.getConsumable());
         skillBar.getConsumableTrigger().setAction(this::heroConsume);
-        skillBar.getConsumableTrigger().setTooltip(new Tooltip(TooltipTexts.consumeTooltip(hero.getConsumable())));
+        skillBar.getConsumableTrigger().setTooltipID(XMLFactory.TEXTE_ID.SKILL_TOOLTIP_CONSUME);
 
         scene.setOnKeyReleased(event -> skillBar.process(event.getCode()));
     }
@@ -140,7 +139,6 @@ public class LearningSoulsGameApplication extends Application
         if (heroName == null || heroName.isEmpty() || heroName.replace(" ", "").isEmpty()) { hero = new Hero(); }
         else { hero = new Hero(heroName); }
         hero.setWeapon(new Sword());
-        hero.setStamina(0);
         hero.setConsumable(new SuperBerry());
         heroRenderer = animationPane.createHeroRenderer();
         animationPane.initHeroInScene(heroRenderer);
@@ -332,6 +330,7 @@ public class LearningSoulsGameApplication extends Application
             animationPane.getChildren().remove(zombieRenderer);
             score.setValue(score.getValue() + 1);
             createMonster(event -> {
+                hero.setWeapon(new Weapon("Hand of Malenia", 5 + (int)(score.getValue() * 2.5), 10 + (score.getValue() * 5), Math.max(20 - (score.getValue() * 2), 5), 100));
                 modLoader.invoke("newMonsterCreate");
                 monsterTurn(0);
             });

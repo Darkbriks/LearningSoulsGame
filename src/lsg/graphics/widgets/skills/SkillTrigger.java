@@ -9,13 +9,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import lsg.data.XMLFactory;
+import lsg.data.XMLFactory.TEXTE_ID;
 import lsg.graphics.CSSFactory;
+import lsg.utils.Constants;
 
 public class SkillTrigger extends AnchorPane
 {
     private final ImageView view;
     private Label text;
     private Tooltip tooltip;
+    private TEXTE_ID tooltipID;
     private KeyCode keyCode;
     private SkillAction action = null;
     private final ColorAdjust desaturate;
@@ -25,11 +29,14 @@ public class SkillTrigger extends AnchorPane
         this.view = new ImageView(image);
         this.text = new Label(text);
         this.tooltip = new Tooltip(tooltip);
+        this.tooltipID = TEXTE_ID.DEFAULT_SKILL_TOOLTIP;
         this.keyCode = keyCode;
         this.action = action;
         this.desaturate = new ColorAdjust();
         this.desaturate.setSaturation(-1);
         this.desaturate.setBrightness(0.6);
+
+        this.tooltip.setOnShowing(event -> this.tooltip.setText(getTooltipText()));
 
         buildUI();
         addListeners();
@@ -38,17 +45,13 @@ public class SkillTrigger extends AnchorPane
     public Image getImage() { return this.view.getImage(); }
     public Label getText() { return this.text; }
     public Tooltip getTooltip() { return this.tooltip; }
+    public TEXTE_ID getTooltipID() { return this.tooltipID; }
     public KeyCode getKeyCode() { return this.keyCode; }
     public SkillAction getAction() { return this.action; }
 
     public void setImage(Image image) { this.view.setImage(image); }
     public void setText(Label text) { this.text = text; }
-    public void setTooltip(Tooltip tooltip)
-    {
-        Tooltip.uninstall(this, tooltip);
-        this.tooltip = tooltip;
-        Tooltip.install(this, tooltip);
-    }
+    public void setTooltipID(TEXTE_ID tooltipID) { this.tooltipID = tooltipID; }
     public void setKeyCode(KeyCode keyCode) { this.keyCode = keyCode; }
     public void setAction(SkillAction action) { this.action = action; }
 
@@ -101,4 +104,6 @@ public class SkillTrigger extends AnchorPane
         st.setCycleCount(2);
         st.play();
     }
+
+    private String getTooltipText() { return XMLFactory.getText(tooltipID).toString(Constants.getLang()); }
 }

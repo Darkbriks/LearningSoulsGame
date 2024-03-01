@@ -2,6 +2,8 @@
 
 Ce document donne un aperçu des fonctionnalités que nous souhaitons ajouter dans les prochaines versions du projet.
 
+## Format
+
 Pour l'ajout de fonctionnalités, le format est le suivant :
 
 - **Version** : version du projet envisagée pour la sortie de la fonctionnalité
@@ -22,9 +24,18 @@ Pour les corrections de bugs, le format est le suivant :
 - **Issue de résolution** : numéro de l'issue qui a résolu le bug (si existante)
 - **Commit de résolution** : numéro du commit qui a résolu le bug (si existant)
 
-## Annexe 1 : Niveaux de criticité des bugs
+### Annexe 1 : Niveaux de criticité des bugs
 
 - **Faible** : le bug n'a pas d'impact réel sur l'utilisation du jeu du point de vue de l'utilisateur (ex : faute de frappe dans un message, couleur de texte incorrecte, etc.)
 - **Moyen** : le bug a un impact mineur sur l'utilisation du jeu du point de vue de l'utilisateur (ex : message d'erreur dans la console, comportement inattendu non bloquant, etc.)
 - **Élevé** : le bug a un impact majeur sur l'utilisation du jeu (ex : comportement inattendu bloquant, graphismes corrompus, etc.)
 - **Critique** : le bug empêche l'utilisation du jeu (ex : crash du jeu, perte de données, etc.)
+
+## Roadmap
+
+### Suspicions de bugs dans le compte des dégats
+- **Version** : dès que possible
+- **Description** : les dégats infligés par les joueurs semblent incorrects
+- **Impact** : moyen
+- **Statut** : à faire
+- **Issue associée** : aucun
