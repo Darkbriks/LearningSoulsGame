@@ -15,12 +15,36 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Modification de l'appel au super-constructeur dans la classe `ConsumableTrigger` pour ajouter un paramètre `Tooltip`
   - Modification de la méthode `init` de la classe `SkillBar` pour ajouter des tooltips initialisés a `null`
   - Modification de la méthode `createSkillBar` de la classe `LearningSoulsGameApplication` pour ajouter des tooltips aux compétences du héros
-- CLasse `TooltipTexts` ajoutée pour stocker les textes des tooltips
+- CLasse `TextPart` pour stocker un morceau de texte qui peut être intérprété comme une succession de méthodes
+    - Méthode `get` pour obtenir le texte (interprété si spécifié dans le constructeur)
+    - Méthode `toXML` pour obtenir le texte sous forme de balise XML (renvoie un `org.w3c.dom.Node.Element`)
+    - Méthode statique `fromXML` pour créer un `TextPart` à partir d'une balise XML (prend un `org.w3c.dom.Node` en paramètre)
+- Classe `InterpretableText` pour stocker une phrase composée de `TextPart` dans plusieurs langues
+    - Méthode `toString` pour obtenir le texte (si la langue n'est pas précisé, en anglais)
+    - Méthode `toXML` pour obtenir le texte sous forme de balise XML (prend un `org.w3c.dom.Node.Element.Document` en paramétre et renvoie un `org.w3c.dom.Node.Element`)
+    - Méthode statique `fromXML` pour créer un `InterpretableText` à partir d'une balise XML (prend un `org.w3c.dom.Node` en paramètre)
+- Classe `XMLFactory` pour lire et écritre des fichiers XML
+    - Méthode statique `preloadAll` pour charger tous les fichiers XML dans une `HashMap`
+    - Méthode statique `getText` pour obtenir un `InterpretableText` à partir d'un identifiant
+    - Méthode statique `createXML` pour créer un fichier XML à partir d'une liste d'id et de `InterpretableText`
+    - TODO: other methods
+    - Classe `XMLExceptionFile` pour créer le fichier XML contenant les textes des exceptions du jeu dans 4 langues (EN, FR, ES, DE)
+    - Classe `XMLSkillTooltipFile` pour créer le fichier XML contenant les textes des tooltips des compétences du héros dans 4 langues (EN, FR, ES, DE)
+    - Classe `XMLTemplateFile` pour créer un fichier XML de template (qui n'est pas exploité, uniquement pour avoir la structure d'un fichier XML)
+- ComboBox sur l'écran de création du personnage pour choisir la langue du jeu
+
+### Changed
+
+- À chaque fois que le joueur tue un monstre, il obtient une nouvelle épée, dont les stats sont basée sur le score du joueur
+- Le texte de toutes les exceptions du jeu est maintenant stocké dans un fichier XML
+  - Les textes des exceptions sont stockés dans 4 langues (EN, FR, ES, DE)
 
 ### Fixed
 
 - Ajout d'un test pour vérifier que l'action n'est pas `null` dans la méthode `trigger` de la classe `SkillTrigger`
   - L'absence de cette vérification provoquait un message d'erreur dans la console lorsqu'une compétence non initialisée était utilisée
+- Correction du texte de l'exception `WeaponBrokenException` dans la classe `Weapon`
+  - Le texte de l'exception était incorrect, car il affichait la représentation de l'arme au lieu de son nom
 
 ### Removed
 
