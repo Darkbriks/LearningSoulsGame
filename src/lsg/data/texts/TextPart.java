@@ -6,13 +6,14 @@ import lsg.weapons.Sword;
 import lsg.weapons.Weapon;
 import lsg_api.characters.ICharacter;
 import lsg_api.characters.IHero;
-import lsg_api.characters.IMonster;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import static lsg_api.characters.ICharacter.*;
 
 /**
  * Cette classe représente une partie de texte qui peut être soit une chaîne de caractères, soit une méthode à exécuter.
@@ -175,28 +176,6 @@ public class TextPart
     }
 
     /**
-     * Méthode permettant de récupérer le héros. Uniquement déstinée à être utilisée dans la classe pour le mot clé "HERO".
-     *
-     * @return Le héros.
-     */
-    public IHero getHero() { return ICharacter.getHero(); }
-
-    /**
-     * Méthode permettant de récupérer le monstre. Uniquement déstinée à être utilisée dans la classe pour le mot clé "MONSTER".
-     *
-     * @return Le monstre.
-     */
-    public IMonster getMonster() { return ICharacter.getMonster(); }
-
-    /**
-     * Méthode permettant de récupérer un personnage. Uniquement déstinée à être utilisée dans la classe pour le mot clé "CHARACTER".
-     *
-     * @param name Le nom du personnage.
-     * @return Le personnage.
-     */
-    public ICharacter getCharacter(String name) { return ICharacter.getCharacter(name); }
-
-    /**
      * Méthode permettant de convertir la partie de texte en XML.
      *
      * @implNote La conversion en XML ne prend pas en compte l'instance associée, et la définie comme "null".
@@ -240,12 +219,6 @@ public class TextPart
         System.out.println(textPart.get());
 
         textPart = new TextPart("HERO.getHitWith~10~INT.HERO.getLife", null);
-        System.out.println(textPart.get());
-
-        //String xml = textPart.toXML();
-        //System.out.println(xml);
-
-        //textPart = TextPart.fromXML(xml);
         System.out.println(textPart.get());
     }
 
