@@ -7,6 +7,8 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.3.2] - 2024-03-2
+
 ### Added
 
 - Ajout de tooltips pour les compétences du héros
