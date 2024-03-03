@@ -36,6 +36,7 @@ public class ImageFactory {
 
         ATTACK_SKILL                ("images/Hero Skill Free/Power of blessing.png"),
         RECUPERATE_SKILL            ("images/Hero Skill Free/Drain mana.png"),
+        WEAPON_SKILL                ("images/craftpix/_PNG/Skills/active1.png"),
 
         SUPER_BERRY                 ("images/Basic RPG Item Free/Berry_03.png"),
         SMALL_STAM_POTION           ("images/Basic RPG Item Free/Small Potion_01.png")

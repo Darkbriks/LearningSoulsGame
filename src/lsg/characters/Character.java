@@ -227,6 +227,14 @@ public abstract class Character implements ICharacter
         return attackWith(weapon);
     }
 
+    public int weaponSkill() throws
+            WeaponNullException,
+            WeaponBrokenException,
+            StaminaEmptyException
+    {
+        return weaponSkill(weapon);
+    }
+
     public int getHitWith(int value)
     {
         int minor = (life - value >= 0) ? value : life;

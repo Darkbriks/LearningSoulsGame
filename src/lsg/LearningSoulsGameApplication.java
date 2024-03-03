@@ -127,6 +127,10 @@ public class LearningSoulsGameApplication extends Application
         skillBar.getTrigger(1).setAction(this::heroRecuperate);
         skillBar.getTrigger(1).setTooltipID(XMLFactory.TEXTE_ID.SKILL_TOOLTIP_2);
 
+        skillBar.getTrigger(4).setImage(ImageFactory.getSprites(ImageFactory.SPRITES_ID.WEAPON_SKILL)[0]);
+        skillBar.getTrigger(4).setAction(this::heroWeponSkill);
+        skillBar.getTrigger(4).setTooltipID(XMLFactory.TEXTE_ID.SKILL_TOOLTIP_2);
+
         skillBar.getConsumableTrigger().setConsumable(hero.getConsumable());
         skillBar.getConsumableTrigger().setAction(this::heroConsume);
         skillBar.getConsumableTrigger().setTooltipID(XMLFactory.TEXTE_ID.SKILL_TOOLTIP_CONSUME);
@@ -255,6 +259,17 @@ public class LearningSoulsGameApplication extends Application
         hudPane.getMessagePane().showMessage("You recuperate life and stamina", 1, event -> {
             modLoader.invoke("heroFinishRecuperate");
             finishTurn();
+        });
+    }
+
+    private void heroWeponSkill()
+    {
+        heroCanPlay.setValue(false);
+        hero.weaponSkill();
+        heroRenderer.attack(event -> {
+            hudPane.getMessagePane().showMessage("You use your weapon skill", 1, event1 -> {
+                finishTurn();
+            });
         });
     }
 
