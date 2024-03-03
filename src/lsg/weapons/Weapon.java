@@ -1,8 +1,11 @@
 package lsg.weapons;
 
 import lsg.utils.Constants;
+import lsg_api.characters.ICharacter;
+import lsg_api.characters.IHero;
 import lsg_api.consumables.IRepairKit;
 import lsg_api.weapon.IWeapon;
+import lsg_api.weapon.IWeaponSkillArgs;
 
 public class Weapon implements IWeapon
 {
@@ -43,6 +46,16 @@ public class Weapon implements IWeapon
     public boolean isBroken() { return getDurability() <= 0; }
 
     public void repairWith(IRepairKit kit) { setDurability(getDurability() + kit.use()); }
+
+    public <T extends ICharacter> int weaponSkill(T character)
+    {
+        // Attaque qui utilise toute la stamina du héros et inflige minDamage * (stamina / 2)
+        int stam = character.getStamina();
+        character.setStamina(0);
+        this.durability -= 5;
+        if (this.durability < 0) { int diff = Math.abs(this.durability); this.durability = 0; return (int) (minDamage * (stam / 2) / (0.5 * diff)); }
+        return minDamage * (stam / 2);
+    }
 
     @Override
     public String toString()

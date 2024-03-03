@@ -128,10 +128,7 @@ public abstract class Character implements ICharacter
      * @throws WeaponBrokenException if weapon is broken
      * @throws StaminaEmptyException if stamina is empty
      */
-    private int attackWith(IWeapon weapon) throws
-            WeaponNullException,
-            WeaponBrokenException,
-            StaminaEmptyException
+    private int attackWith(IWeapon weapon) throws WeaponNullException, WeaponBrokenException, StaminaEmptyException
     {
         if (weapon == null) { throw new WeaponNullException(); }
         if (weapon.isBroken()) { throw new WeaponBrokenException(weapon); }
@@ -147,6 +144,17 @@ public abstract class Character implements ICharacter
             if (overflow < 0) { damage = lerp(damage, 1 + overflow / (double) weapon.getStamCost()); }
             weapon.use();
         }
+        return (int) Math.round(damage);
+    }
+
+    private int weaponSkill(IWeapon weapon) throws WeaponNullException, WeaponBrokenException, StaminaEmptyException
+    {
+        if (weapon == null) { throw new WeaponNullException(); }
+        if (weapon.isBroken()) { throw new WeaponBrokenException(weapon); }
+        if (stamina <= 0) { throw new StaminaEmptyException(); }
+
+        double damage = 0;
+        if (!weapon.isBroken() && isAlive()) { damage = weapon.weaponSkill(this); }
         return (int) Math.round(damage);
     }
 
