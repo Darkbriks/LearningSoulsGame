@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import lsg.data.XMLFactory;
 import lsg.graphics.CSSFactory;
 import lsg.graphics.widgets.texts.GameLabel;
 import lsg.utils.Constants;
@@ -22,12 +23,14 @@ public class CreationPane extends VBox
     public CreationPane()
     {
         super();
-        nameLabel = new GameLabel("Player Name");
+        nameLabel = new GameLabel(XMLFactory.getText(XMLFactory.TEXTE_ID.CREATION_NAME_TITLE).toString(Constants.getLang()));
+        Constants.getLangProperty().addListener((observable, oldValue, newValue) -> nameLabel.setText(XMLFactory.getText(XMLFactory.TEXTE_ID.CREATION_NAME_TITLE).toString(Constants.LANG.fromString(newValue))));
         this.getChildren().add(nameLabel);
 
         nameField = new TextField();
         nameField.setMaxWidth(200);
-        nameField.setPromptText("Enter your name here");
+        nameField.setPromptText(XMLFactory.getText(XMLFactory.TEXTE_ID.CREATION_NAME_PLACEHOLDER).toString(Constants.getLang()));
+        Constants.getLangProperty().addListener((observable, oldValue, newValue) -> nameField.setPromptText(XMLFactory.getText(XMLFactory.TEXTE_ID.CREATION_NAME_PLACEHOLDER).toString(Constants.LANG.fromString(newValue))));
         nameField.setFocusTraversable(false);
         this.getChildren().add(nameField);
 

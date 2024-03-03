@@ -23,6 +23,10 @@ public class XMLFactory
     {
         TEMPLATE                        ("xml/template.xml"),
 
+        ////////// CREATION PANE //////////
+        CREATION_NAME_TITLE             ("xml/creationPane.xml"),
+        CREATION_NAME_PLACEHOLDER        ("xml/creationPane.xml"),
+
         ////////// EXCEPTIONS //////////
         BAG_FULL                        ("xml/exceptions.xml"),
         CONSUME_EMPTY                   ("xml/exceptions.xml"),
@@ -56,7 +60,15 @@ public class XMLFactory
         }).start();
     }
 
-    public static InterpretableText getText(TEXTE_ID id) { return textes.get(id); }
+    public static InterpretableText getText(TEXTE_ID id)
+    {
+        InterpretableText interpretableText = textes.get(id);
+        if (interpretableText == null)
+        {
+            interpretableText = loadXML(id);
+        }
+        return interpretableText;
+    }
 
     public static void createXML(TEXTE_ID[] ids, InterpretableText[] textes)
     {
@@ -94,7 +106,7 @@ public class XMLFactory
         t.transform(source, new javax.xml.transform.stream.StreamResult(path));
     }
 
-    public static void loadXML(TEXTE_ID id)
+    public static InterpretableText loadXML(TEXTE_ID id)
     {
         try
         {
@@ -116,13 +128,15 @@ public class XMLFactory
             }
 
             textes.put(id, texte);
+            return texte;
         }
-        catch (Exception e) { System.err.println("Error in XMLFactory.loadXML() : " + e.getClass().getSimpleName() + " - " + e.getMessage()); }
+        catch (Exception e) { System.err.println("Error in XMLFactory.loadXML() : " + e.getClass().getSimpleName() + " - " + e.getMessage()); return null; }
     }
 
     public static void createXMLFiles()
     {
         new XMLTemplateFile().CreateXML();
+        new XMLCreationPane().CreateXML();
         new XMLExceptionFile().CreateXML();
         new XMLSkillTooltipFile().CreateXML();
     }
@@ -144,6 +158,41 @@ class XMLTemplateFile {
         );
 
         XMLFactory.createXML(new XMLFactory.TEXTE_ID[] { XMLFactory.TEXTE_ID.TEMPLATE }, new InterpretableText[] { text });
+    }
+}
+
+class XMLCreationPane
+{
+    void CreateXML()
+    {
+        InterpretableText[] texts = new InterpretableText[]
+        {
+            new InterpretableText(
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "PLAYER NAME", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "NOM DE JOUEUR", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "SPIELERNAME", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "NOMBRE DEL JUGADOR", null) });
+                }}
+            ),
+            new InterpretableText(
+                new HashMap<LANG, TextPart[]>()
+                {{
+                    put(LANG.EN, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Enter your name here", null) });
+                    put(LANG.FR, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Entrez votre nom ici", null) });
+                    put(LANG.DE, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Geben sie hier ihren Namen ein", null) });
+                    put(LANG.ES, new TextPart[] { new TextPart(TextPart.TEXT_PART_TYPE.STRING, "Introduzca su nombre aquì", null) });
+                }}
+            ),
+        };
+
+        XMLFactory.TEXTE_ID[] ids = new XMLFactory.TEXTE_ID[]
+        {
+            XMLFactory.TEXTE_ID.CREATION_NAME_TITLE,
+            XMLFactory.TEXTE_ID.CREATION_NAME_PLACEHOLDER,
+        };
+        XMLFactory.createXML(ids, texts);
     }
 }
 

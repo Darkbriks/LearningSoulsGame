@@ -40,6 +40,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - À chaque fois que le joueur tue un monstre, il obtient une nouvelle épée, dont les stats sont basée sur le score du joueur
 - Le texte de toutes les exceptions du jeu est maintenant stocké dans un fichier XML
   - Les textes des exceptions sont stockés dans 4 langues (EN, FR, ES, DE)
+- La classe `CreationPane` utilise le système de langue
 
 ### Fixed
 

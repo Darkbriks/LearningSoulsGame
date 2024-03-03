@@ -177,10 +177,7 @@ public class LearningSoulsGameApplication extends Application
         new java.util.Timer().schedule(new java.util.TimerTask() {
             @Override public void run()
             {
-                gameTitle.zoomIn(event1 -> creationPane.fadeIn(event2 -> ImageFactory.preloadAll((() -> {
-                    XMLFactory.preloadAll((() -> System.out.println("Preload finished")));
-                }
-                ))) );
+                XMLFactory.preloadAll((() -> gameTitle.zoomIn(event1 -> creationPane.fadeIn(event2 -> ImageFactory.preloadAll((() -> System.out.println("Preload finished")))))));
             }
         }, Constants.TITLE_ANIMATION_DELAY);
     }

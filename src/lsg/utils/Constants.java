@@ -1,5 +1,6 @@
 package lsg.utils;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.util.Duration;
 import lsg.graphics.ImageFactory;
 
@@ -80,8 +81,10 @@ public class Constants
         }
     }
 
-    private static LANG lang = LANG.EN;
-    public static LANG getLang() { return lang; }
-    public static void setLang(LANG lang) { Constants.lang = lang; }
+    //private static LANG lang = LANG.EN;
+    private static final SimpleStringProperty lang = new SimpleStringProperty(LANG.EN.toString());
+    public static LANG getLang() { return LANG.fromString(lang.getValue()); }
+    public static SimpleStringProperty getLangProperty() { return lang; }
+    public static void setLang(LANG lang) { Constants.lang.setValue(lang.toString()); }
     public static String[] getLangList() { return new String[]{LANG.EN.toString(), LANG.FR.toString(), LANG.DE.toString(), LANG.ES.toString()}; }
 }
