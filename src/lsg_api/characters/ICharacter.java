@@ -50,6 +50,7 @@ public interface ICharacter
     /////////////// METHODS ///////////////
     boolean isAlive();
     int attack() throws WeaponNullException, WeaponBrokenException, StaminaEmptyException;
+    public int weaponSkill() throws WeaponNullException, WeaponBrokenException, StaminaEmptyException;
     int getHitWith(int value);
     void use(IConsumable consumable) throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException;
     void consume() throws ConsumeNullException, ConsumeEmptyException, ConsumeRepairNullWeaponException;
